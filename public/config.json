@@ -1,0 +1,49 @@
+{
+  "personalInfo": {
+    "name": "Lothar（ロタール）",
+    "title": "動画投稿者、動画勢Vtuber",
+    "description": "ゲーム実況と動画勢Vtuberを中心に、2つのYouTubeチャンネルで活動している動画投稿者です。視聴者も自分も楽しめるコンテンツ作りを心がけ、Vtuberチャンネルは毎月25日の定期投稿を続けています。",
+    "avatar": "images/avatar.png"
+  },
+  "youtubeChannels": [
+    {
+      "id": "UCfwwSQO4_ONXzO-vLO_P8dA",
+      "name": "ゲーム実況チャンネル",
+      "description": "MHWの縛りプレイを中心にゲーム実況動画、配信をやっているチャンネル。",
+      "url": "https://youtube.com/channel/UCxxxxxxxxxxxxx",
+      "customUrl": "@techchannel"
+    },
+    {
+      "id": "UCax82t3Xqk1rm0w55Iv_UXg",
+      "name": "ライフスタイルチャンネル",
+      "description": "動画勢Vtuberとして毎月25日に動画をあげているチャンネル。メインコンテンツはモノづくりとVlog",
+      "url": "https://youtube.com/channel/UCyyyyyyyyyyy",
+      "customUrl": "@lifestyle"
+    }
+  ],
+  "socialLinks": [
+    {
+      "platform": "twitter",
+      "url": "https://x.com/9eschSernC55380",
+      "icon": "twitter",
+      "label": "Twitter"
+    },
+    {
+      "platform": "github",
+      "url": "https://github.com/lothar0630-ship-it",
+      "icon": "github",
+      "label": "GitHub"
+    },
+    {
+      "platform": "niconico",
+      "url": "https://www.nicovideo.jp/user/username",
+      "icon": "niconico",
+      "label": "ニコニコ動画"
+    }
+  ],
+  "theme": {
+    "primaryColor": "#00B33A",
+    "secondaryColor": "#4B5563",
+    "accentColor": "#FF7700"
+  }
+}
