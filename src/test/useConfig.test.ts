@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import {
   useConfig,
   useConfigReload,
@@ -369,7 +369,9 @@ describe('useConfigReload', () => {
     const initialTrigger = result.current.reloadTrigger;
 
     // reload関数を呼び出す
-    result.current.reload();
+    act(() => {
+      result.current.reload();
+    });
 
     // 再レンダリングして状態の変更を確認
     rerender();

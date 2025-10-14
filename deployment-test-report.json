@@ -1,0 +1,72 @@
+{
+  "timestamp": "2025-10-13T13:16:45.497Z",
+  "environment": "development",
+  "tests": [
+    {
+      "name": "YouTube API Key",
+      "passed": true,
+      "type": "pass",
+      "message": "YouTube API key is configured",
+      "timestamp": "2025-10-13T13:16:45.512Z"
+    },
+    {
+      "name": "Build Output",
+      "passed": true,
+      "type": "pass",
+      "message": "Production build exists and is valid",
+      "timestamp": "2025-10-13T13:16:45.513Z"
+    },
+    {
+      "name": "Security Configuration",
+      "passed": true,
+      "type": "pass",
+      "message": "No sensitive files in build output",
+      "timestamp": "2025-10-13T13:16:45.513Z"
+    },
+    {
+      "name": "Bundle Size Tests",
+      "passed": false,
+      "type": "fail",
+      "message": "Bundle size tests failed",
+      "timestamp": "2025-10-13T13:16:47.136Z"
+    },
+    {
+      "name": "Performance Monitoring Tests",
+      "passed": true,
+      "type": "pass",
+      "message": "Performance monitoring tests passed",
+      "timestamp": "2025-10-13T13:16:48.769Z"
+    },
+    {
+      "name": "Load Time Validation (Estimated)",
+      "passed": true,
+      "type": "pass",
+      "message": "Estimated load time: 1631ms (< 3000ms)",
+      "timestamp": "2025-10-13T13:16:48.770Z"
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 5,
+    "failed": 1,
+    "warnings": 0
+  },
+  "requirements": {
+    "7.3": {
+      "description": "99.9%以上のアップタイムが保証されること",
+      "status": "met",
+      "note": "AWS SLA provides 99.9% uptime guarantee"
+    },
+    "7.4": {
+      "description": "CDNによる高速な配信が実現されること",
+      "status": "met",
+      "note": "CloudFront CDN configured for global distribution"
+    }
+  },
+  "recommendations": [
+    {
+      "type": "error",
+      "message": "1 deployment tests failed. Review and fix issues before production deployment."
+    }
+  ]
+}

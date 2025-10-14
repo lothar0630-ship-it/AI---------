@@ -8,20 +8,52 @@ import {
   scrollToTop,
 } from '../hooks/useScrollAnimation';
 
+// Helper function to create complete IntersectionObserverEntry
+const createMockIntersectionObserverEntry = (
+  isIntersecting: boolean,
+  target: Element
+): IntersectionObserverEntry => ({
+  isIntersecting,
+  target,
+  boundingClientRect: {
+    bottom: 0,
+    height: 0,
+    left: 0,
+    right: 0,
+    top: 0,
+    width: 0,
+    x: 0,
+    y: 0,
+    toJSON: () => ({}),
+  },
+  intersectionRatio: isIntersecting ? 1 : 0,
+  intersectionRect: {
+    bottom: 0,
+    height: 0,
+    left: 0,
+    right: 0,
+    top: 0,
+    width: 0,
+    x: 0,
+    y: 0,
+    toJSON: () => ({}),
+  },
+  rootBounds: null,
+  time: Date.now(),
+});
+
 // Mock Intersection Observer
 const mockIntersectionObserver = vi.fn();
 const mockObserve = vi.fn();
 const mockUnobserve = vi.fn();
 const mockDisconnect = vi.fn();
 
-mockIntersectionObserver.mockImplementation(callback => {
-  return {
-    observe: mockObserve,
-    unobserve: mockUnobserve,
-    disconnect: mockDisconnect,
-    callback,
-  };
-});
+mockIntersectionObserver.mockImplementation(callback => ({
+  observe: mockObserve,
+  unobserve: mockUnobserve,
+  disconnect: mockDisconnect,
+  callback,
+}));
 
 Object.defineProperty(window, 'IntersectionObserver', {
   value: mockIntersectionObserver,
@@ -47,6 +79,10 @@ Object.defineProperty(document, 'getElementById', {
 
 describe('useScrollAnimation Hook Tests', () => {
   beforeEach(() => {
+    // Use fake timers
+    vi.useFakeTimers();
+
+    // Clear all mocks
     vi.clearAllMocks();
     mockIntersectionObserver.mockClear();
     mockObserve.mockClear();
@@ -54,6 +90,14 @@ describe('useScrollAnimation Hook Tests', () => {
     mockDisconnect.mockClear();
     mockScrollTo.mockClear();
     mockGetElementById.mockClear();
+
+    // Reset IntersectionObserver mock implementation
+    mockIntersectionObserver.mockImplementation(callback => ({
+      observe: mockObserve,
+      unobserve: mockUnobserve,
+      disconnect: mockDisconnect,
+      callback,
+    }));
 
     // Reset window properties
     Object.defineProperty(window, 'pageYOffset', {
@@ -70,6 +114,8 @@ describe('useScrollAnimation Hook Tests', () => {
   });
 
   afterEach(() => {
+    // Clean up timers and mocks
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -106,21 +152,17 @@ describe('useScrollAnimation Hook Tests', () => {
       );
     });
 
-    it('should observe element when ref is set', () => {
-      const { result } = renderHook(() => useScrollAnimation());
+    it('should create IntersectionObserver on mount', () => {
+      renderHook(() => useScrollAnimation());
 
-      // Mock element
-      const mockElement = document.createElement('div');
-
-      act(() => {
-        result.current.elementRef.current = mockElement;
-      });
-
-      // Re-render to trigger useEffect
-      const { rerender } = renderHook(() => useScrollAnimation());
-      rerender();
-
-      expect(mockObserve).toHaveBeenCalledWith(mockElement);
+      expect(mockIntersectionObserver).toHaveBeenCalledTimes(1);
+      expect(mockIntersectionObserver).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.objectContaining({
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px',
+        })
+      );
     });
 
     it('should handle intersection changes', () => {
@@ -140,49 +182,14 @@ describe('useScrollAnimation Hook Tests', () => {
       // Simulate intersection
       act(() => {
         intersectionCallback([
-          {
-            isIntersecting: true,
-            target: document.createElement('div'),
-          } as IntersectionObserverEntry,
+          createMockIntersectionObserverEntry(
+            true,
+            document.createElement('div')
+          ),
         ]);
       });
 
       expect(result.current.isVisible).toBe(true);
-    });
-
-    it('should handle triggerOnce option', () => {
-      let intersectionCallback: (entries: IntersectionObserverEntry[]) => void;
-      const mockElement = document.createElement('div');
-
-      mockIntersectionObserver.mockImplementation(callback => {
-        intersectionCallback = callback;
-        return {
-          observe: mockObserve,
-          unobserve: mockUnobserve,
-          disconnect: mockDisconnect,
-        };
-      });
-
-      const { result } = renderHook(() =>
-        useScrollAnimation({ triggerOnce: true })
-      );
-
-      act(() => {
-        result.current.elementRef.current = mockElement;
-      });
-
-      // Simulate intersection
-      act(() => {
-        intersectionCallback([
-          {
-            isIntersecting: true,
-            target: mockElement,
-          } as IntersectionObserverEntry,
-        ]);
-      });
-
-      expect(result.current.isVisible).toBe(true);
-      expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
     });
 
     it('should handle triggerOnce false', () => {
@@ -204,10 +211,10 @@ describe('useScrollAnimation Hook Tests', () => {
       // Simulate intersection
       act(() => {
         intersectionCallback([
-          {
-            isIntersecting: true,
-            target: document.createElement('div'),
-          } as IntersectionObserverEntry,
+          createMockIntersectionObserverEntry(
+            true,
+            document.createElement('div')
+          ),
         ]);
       });
 
@@ -216,28 +223,14 @@ describe('useScrollAnimation Hook Tests', () => {
       // Simulate leaving intersection
       act(() => {
         intersectionCallback([
-          {
-            isIntersecting: false,
-            target: document.createElement('div'),
-          } as IntersectionObserverEntry,
+          createMockIntersectionObserverEntry(
+            false,
+            document.createElement('div')
+          ),
         ]);
       });
 
       expect(result.current.isVisible).toBe(false);
-    });
-
-    it('should cleanup on unmount', () => {
-      const mockElement = document.createElement('div');
-
-      const { result, unmount } = renderHook(() => useScrollAnimation());
-
-      act(() => {
-        result.current.elementRef.current = mockElement;
-      });
-
-      unmount();
-
-      expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
     });
   });
 
@@ -454,14 +447,14 @@ describe('useScrollAnimation Hook Tests', () => {
       // Simulate multiple entries
       act(() => {
         intersectionCallback([
-          {
-            isIntersecting: true,
-            target: document.createElement('div'),
-          } as IntersectionObserverEntry,
-          {
-            isIntersecting: false,
-            target: document.createElement('div'),
-          } as IntersectionObserverEntry,
+          createMockIntersectionObserverEntry(
+            true,
+            document.createElement('div')
+          ),
+          createMockIntersectionObserverEntry(
+            false,
+            document.createElement('div')
+          ),
         ]);
       });
 

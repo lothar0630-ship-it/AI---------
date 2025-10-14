@@ -49,10 +49,10 @@ describe('Header Component', () => {
       expect(screen.getByText('Social')).toBeInTheDocument();
     });
 
-    it('should render CTA button', () => {
+    it('should render mobile menu button', () => {
       render(<Header personalInfo={mockPersonalInfo} />);
 
-      expect(screen.getByText('お問い合わせ')).toBeInTheDocument();
+      expect(screen.getByLabelText('メニューを開く')).toBeInTheDocument();
     });
   });
 
@@ -109,17 +109,13 @@ describe('Header Component', () => {
       expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
     });
 
-    it('should scroll to social section when CTA button is clicked', async () => {
-      const mockElement = document.createElement('div');
-      mockGetElementById.mockReturnValue(mockElement);
-
+    it('should handle mobile menu toggle', async () => {
       render(<Header personalInfo={mockPersonalInfo} />);
 
-      const ctaButton = screen.getByLabelText('お問い合わせセクションに移動');
-      await userEvent.click(ctaButton);
+      const menuButton = screen.getByLabelText('メニューを開く');
+      await userEvent.click(menuButton);
 
-      expect(mockGetElementById).toHaveBeenCalledWith('social');
-      expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+      expect(screen.getByLabelText('メニューを閉じる')).toBeInTheDocument();
     });
 
     it('should handle case when target element does not exist', async () => {
@@ -214,23 +210,18 @@ describe('Header Component', () => {
       expect(mobileMenuButton.closest('div')).toHaveClass('md:hidden');
     });
 
-    it('should have responsive classes for CTA button', () => {
+    it('should have responsive classes for mobile menu', () => {
       render(<Header personalInfo={mockPersonalInfo} />);
 
-      const ctaButton = screen.getByLabelText('お問い合わせセクションに移動');
-      expect(ctaButton.closest('div')).toHaveClass('hidden', 'md:block');
+      const mobileMenuButton = screen.getByLabelText('メニューを開く');
+      expect(mobileMenuButton.closest('div')).toHaveClass('md:hidden');
     });
 
     it('should have responsive container classes', () => {
       const { container } = render(<Header personalInfo={mockPersonalInfo} />);
 
-      const headerContainer = container.querySelector('.container');
-      expect(headerContainer).toHaveClass(
-        'mx-auto',
-        'px-4',
-        'sm:px-6',
-        'lg:px-8'
-      );
+      const headerContainer = container.querySelector('.container-responsive');
+      expect(headerContainer).toBeInTheDocument();
     });
 
     it('should have sticky header with proper z-index', () => {
@@ -262,9 +253,7 @@ describe('Header Component', () => {
       expect(
         screen.getByLabelText('Socialセクションに移動')
       ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText('お問い合わせセクションに移動')
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText('メニューを開く')).toBeInTheDocument();
       expect(screen.getByLabelText('メニューを開く')).toBeInTheDocument();
     });
 
@@ -328,8 +317,11 @@ describe('Header Component', () => {
       const logoButton = screen.getByLabelText('ホームに戻る');
       expect(logoButton).toHaveClass('hover:text-primary-600');
 
-      const ctaButton = screen.getByLabelText('お問い合わせセクションに移動');
-      expect(ctaButton).toHaveClass('hover:bg-primary-600', 'hover:shadow-lg');
+      const mobileMenuButton = screen.getByLabelText('メニューを開く');
+      expect(mobileMenuButton).toHaveClass(
+        'hover:text-primary',
+        'hover:bg-gray-100'
+      );
     });
 
     it('should have proper shadow and border styles', () => {

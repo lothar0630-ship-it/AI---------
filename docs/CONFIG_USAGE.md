@@ -1,304 +1,422 @@
-# 設定ファイルとデータ管理システム
+# 設定ファイル使用ガイド
 
-このドキュメントでは、個人ポータルサイトの設定ファイルシステムの使用方法について説明します。
+このドキュメントでは、個人ポータルサイトの設定ファイルの使用方法について詳しく説明します。
 
-## 概要
+## 📁 設定ファイルの場所
 
-設定システムは以下の機能を提供します：
+### メイン設定ファイル
 
-- JSON設定ファイルからのデータ読み込み
-- TypeScript型安全性
-- デフォルト値とフォールバック処理
-- 設定データの検証
-- React カスタムフックによる簡単なアクセス
+- `public/config.json` - アプリケーションのメイン設定
+- `.env` - 環境変数（API キーなど）
+- `.env.example` - 環境変数のテンプレート
+- `.env.production` - 本番環境用設定
 
-## 設定ファイル構造
+### その他の設定ファイル
+
+- `vite.config.ts` - Vite ビルド設定
+- `tailwind.config.js` - スタイル設定
+- `tsconfig.json` - TypeScript 設定
+
+## 🔧 config.json の詳細設定
 
 ### 基本構造
 
 ```json
 {
+  "personalInfo": { ... },
+  "youtubeChannels": [ ... ],
+  "socialLinks": [ ... ],
+  "theme": { ... }
+}
+```
+
+### personalInfo セクション
+
+個人情報を設定します。
+
+```json
+{
   "personalInfo": {
-    "name": "開発者名",
+    "name": "あなたの名前",
     "title": "職業・肩書き",
-    "description": "自己紹介文",
-    "avatar": "/images/avatar.jpg"
-  },
+    "description": "自己紹介文（簡潔に）",
+    "avatar": "images/avatar.png",
+    "detailedDescription": "詳細な自己紹介文（AboutSectionで使用）",
+    "skills": ["JavaScript", "TypeScript", "React", "Node.js"],
+    "experience": "経歴情報",
+    "location": "所在地（オプション）",
+    "email": "contact@example.com（オプション）"
+  }
+}
+```
+
+#### フィールド説明
+
+- `name`: サイトに表示される名前
+- `title`: 職業や肩書き
+- `description`: ヒーローセクションで表示される簡潔な自己紹介
+- `avatar`: アバター画像のパス（publicフォルダからの相対パス）
+- `detailedDescription`: 自己紹介セクションで表示される詳細な説明
+- `skills`: スキルタグとして表示される技術スタック
+- `experience`: 経歴情報
+- `location`: 所在地（オプション）
+- `email`: 連絡先メールアドレス（オプション）
+
+### youtubeChannels セクション
+
+YouTubeチャンネル情報を設定します。
+
+```json
+{
   "youtubeChannels": [
     {
       "id": "UCxxxxxxxxxxxxx",
-      "name": "チャンネル名",
-      "description": "チャンネル説明",
+      "name": "メインチャンネル",
+      "description": "ゲーム実況やプログラミング関連の動画を投稿",
       "url": "https://youtube.com/channel/UCxxxxxxxxxxxxx",
-      "customUrl": "@channelname"
+      "customUrl": "@your-channel-name",
+      "category": "gaming",
+      "language": "ja",
+      "isActive": true
+    },
+    {
+      "id": "UCyyyyyyyyyyy",
+      "name": "サブチャンネル",
+      "description": "日常のVlogや趣味の動画",
+      "url": "https://youtube.com/channel/UCyyyyyyyyyyy",
+      "customUrl": "@your-sub-channel",
+      "category": "lifestyle",
+      "language": "ja",
+      "isActive": true
     }
-  ],
+  ]
+}
+```
+
+#### フィールド説明
+
+- `id`: YouTubeチャンネルID（必須）
+- `name`: チャンネル名
+- `description`: チャンネルの説明
+- `url`: チャンネルのURL
+- `customUrl`: カスタムURL（@から始まる）
+- `category`: チャンネルのカテゴリ（オプション）
+- `language`: 言語設定（オプション）
+- `isActive`: アクティブかどうか（オプション）
+
+### socialLinks セクション
+
+ソーシャルメディアリンクを設定します。
+
+```json
+{
   "socialLinks": [
     {
       "platform": "twitter",
-      "url": "https://twitter.com/username",
+      "url": "https://twitter.com/your_username",
       "icon": "twitter",
-      "label": "Twitter"
+      "label": "Twitter",
+      "username": "@your_username",
+      "isActive": true,
+      "order": 1
+    },
+    {
+      "platform": "github",
+      "url": "https://github.com/your_username",
+      "icon": "github",
+      "label": "GitHub",
+      "username": "your_username",
+      "isActive": true,
+      "order": 2
+    },
+    {
+      "platform": "linkedin",
+      "url": "https://linkedin.com/in/your_username",
+      "icon": "linkedin",
+      "label": "LinkedIn",
+      "username": "your_username",
+      "isActive": true,
+      "order": 3
+    },
+    {
+      "platform": "discord",
+      "url": "https://discord.gg/your_server",
+      "icon": "discord",
+      "label": "Discord",
+      "username": "your_username#1234",
+      "isActive": false,
+      "order": 4
     }
-  ],
+  ]
+}
+```
+
+#### サポートされているプラットフォーム
+
+- `twitter` - Twitter/X
+- `github` - GitHub
+- `linkedin` - LinkedIn
+- `discord` - Discord
+- `instagram` - Instagram
+- `youtube` - YouTube（個別チャンネルリンク用）
+- `twitch` - Twitch
+- `tiktok` - TikTok
+- `facebook` - Facebook
+
+#### フィールド説明
+
+- `platform`: プラットフォーム名（上記リストから選択）
+- `url`: プロフィールのURL
+- `icon`: アイコン名（Lucide Reactアイコン名）
+- `label`: 表示ラベル
+- `username`: ユーザー名（オプション）
+- `isActive`: 表示するかどうか
+- `order`: 表示順序（数値が小さいほど先に表示）
+
+### theme セクション
+
+サイトのテーマカラーを設定します。
+
+```json
+{
   "theme": {
     "primaryColor": "#00B33A",
     "secondaryColor": "#4B5563",
-    "accentColor": "#FF7700"
+    "accentColor": "#FF7700",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#1F2937",
+    "borderColor": "#E5E7EB",
+    "darkMode": false,
+    "fontFamily": "Inter"
   }
 }
 ```
 
-### 設定ファイルの場所
+#### フィールド説明
 
-設定ファイルは `public/config.json` に配置してください。この場所に配置することで、ビルド後も動的に設定を変更できます。
+- `primaryColor`: プライマリカラー（メインの色）
+- `secondaryColor`: セカンダリカラー（サブの色）
+- `accentColor`: アクセントカラー（強調色）
+- `backgroundColor`: 背景色
+- `textColor`: テキスト色
+- `borderColor`: 境界線の色
+- `darkMode`: ダークモード対応（将来の機能）
+- `fontFamily`: フォントファミリー
 
-## カスタムフックの使用方法
+## 🔑 環境変数設定
 
-### 1. 全体設定の取得
+### .env ファイル
 
-```tsx
-import { useConfig } from '../hooks';
+```bash
+# YouTube Data API
+VITE_YOUTUBE_API_KEY=your_youtube_api_key_here
 
-function App() {
-  const { config, loading, error } = useConfig();
+# アプリケーション設定
+VITE_APP_TITLE=Personal Portal Site
+VITE_APP_DESCRIPTION=個人ポータルサイト
+VITE_APP_URL=https://your-domain.com
 
-  if (loading) return <div>読み込み中...</div>;
-  if (error) return <div>エラー: {error}</div>;
+# 開発設定
+VITE_DEV_MODE=true
+VITE_DEBUG_MODE=false
 
-  return <div>{config.personalInfo.name}</div>;
-}
+# アナリティクス（オプション）
+VITE_GA_TRACKING_ID=G-XXXXXXXXXX
+
+# その他のAPI（オプション）
+VITE_CONTACT_FORM_ENDPOINT=https://api.example.com/contact
 ```
 
-### 2. 個別設定項目の取得（推奨）
+### 環境変数の説明
 
-パフォーマンスを向上させるため、必要な設定項目のみを取得することを推奨します：
+#### 必須の環境変数
 
-```tsx
-import {
-  usePersonalInfo,
-  useYouTubeChannels,
-  useSocialLinks,
-  useTheme,
-} from '../hooks';
+- `VITE_YOUTUBE_API_KEY`: YouTube Data API v3のAPIキー
 
-function HeroSection() {
-  const { personalInfo, loading, error } = usePersonalInfo();
+#### オプションの環境変数
 
-  if (loading) return <div>読み込み中...</div>;
+- `VITE_APP_TITLE`: アプリケーションのタイトル
+- `VITE_APP_DESCRIPTION`: アプリケーションの説明
+- `VITE_APP_URL`: アプリケーションのURL
+- `VITE_DEV_MODE`: 開発モードの有効/無効
+- `VITE_DEBUG_MODE`: デバッグモードの有効/無効
+- `VITE_GA_TRACKING_ID`: Google Analytics トラッキングID
+- `VITE_CONTACT_FORM_ENDPOINT`: お問い合わせフォームのエンドポイント
 
-  return (
-    <div>
-      <h1>{personalInfo.name}</h1>
-      <p>{personalInfo.title}</p>
-    </div>
-  );
-}
+## 🎨 スタイル設定
 
-function YouTubeSection() {
-  const { channels, loading, error } = useYouTubeChannels();
+### Tailwind CSS カスタマイズ
 
-  return (
-    <div>
-      {channels.map(channel => (
-        <div key={channel.id}>{channel.name}</div>
-      ))}
-    </div>
-  );
-}
+`tailwind.config.js`でカスタムカラーやスタイルを設定できます。
+
+```javascript
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#f0fdf4',
+          500: '#00B33A',
+          600: '#009930',
+          900: '#14532d',
+        },
+        secondary: {
+          50: '#f9fafb',
+          500: '#4B5563',
+          600: '#374151',
+          900: '#111827',
+        },
+        accent: {
+          50: '#fff7ed',
+          500: '#FF7700',
+          600: '#ea580c',
+          900: '#9a3412',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-in-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+      },
+    },
+  },
+};
 ```
 
-### 3. テーマの適用
+## 📱 レスポンシブ設定
 
-```tsx
-import { useTheme } from '../hooks';
+### ブレークポイント
 
-function ThemedComponent() {
-  const { theme } = useTheme();
+Tailwind CSSのデフォルトブレークポイントを使用：
 
-  return (
-    <div style={{ color: theme.primaryColor }}>
-      テーマカラーが適用されたテキスト
-    </div>
-  );
-}
+- `sm`: 640px以上
+- `md`: 768px以上
+- `lg`: 1024px以上
+- `xl`: 1280px以上
+- `2xl`: 1536px以上
+
+### レスポンシブクラスの例
+
+```html
+<!-- モバイル: 1カラム、デスクトップ: 2カラム -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <!-- モバイル: 小さいテキスト、デスクトップ: 大きいテキスト -->
+  <h1 class="text-2xl md:text-4xl lg:text-6xl">
+    <!-- モバイル: 縦積み、デスクトップ: 横並び -->
+    <div class="flex flex-col md:flex-row"></div>
+  </h1>
+</div>
 ```
 
-## 利用可能なフック
+## 🔧 高度な設定
 
-| フック名               | 戻り値                             | 説明                            |
-| ---------------------- | ---------------------------------- | ------------------------------- |
-| `useConfig()`          | `{ config, loading, error }`       | 全体の設定を取得                |
-| `usePersonalInfo()`    | `{ personalInfo, loading, error }` | 個人情報のみを取得              |
-| `useYouTubeChannels()` | `{ channels, loading, error }`     | YouTubeチャンネル情報のみを取得 |
-| `useSocialLinks()`     | `{ socialLinks, loading, error }`  | ソーシャルリンク情報のみを取得  |
-| `useTheme()`           | `{ theme, loading, error }`        | テーマ設定のみを取得            |
-| `useConfigReload()`    | `{ reload, reloadTrigger }`        | 設定の再読み込み機能            |
+### カスタムコンポーネントの追加
 
-## エラーハンドリング
-
-### 自動フォールバック
-
-設定ファイルの読み込みに失敗した場合、自動的にデフォルト設定が使用されます：
-
-```tsx
-function App() {
-  const { config, loading, error } = useConfig();
-
-  // エラーが発生してもデフォルト設定で動作継続
-  // error は null になり、config にはデフォルト値が設定される
-
-  return <div>{config.personalInfo.name}</div>; // "デフォルト開発者"
-}
-```
-
-### エラー表示
-
-エラーを表示したい場合は、明示的にチェックできます：
-
-```tsx
-function App() {
-  const { config, loading, error } = useConfig();
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
-    return (
-      <ErrorMessage
-        message={error}
-        fallbackMessage="デフォルト設定で動作しています"
-      />
-    );
-  }
-
-  return <MainContent config={config} />;
-}
-```
-
-## 設定の検証
-
-### 自動検証
-
-設定ファイルは読み込み時に自動的に検証され、不正な値は除外またはデフォルト値で置換されます：
+1. **新しいセクションの追加**
 
 ```typescript
-// 不正なYouTubeチャンネルIDは自動的に除外
-// 不正なURLは自動的に除外
-// 不正なカラーコードはデフォルト値で置換
-```
+// src/components/CustomSection.tsx
+import { motion } from 'framer-motion';
 
-### 手動検証
-
-ユーティリティ関数を使用して手動で検証することも可能です：
-
-```tsx
-import { validateConfigSchema, validateConfigValue } from '../utils';
-
-// 設定全体の検証
-const { isValid, errors } = validateConfigSchema(configData);
-
-// 個別値の検証
-const isValidUrl = validateConfigValue.isValidUrl('https://example.com');
-const isValidColor = validateConfigValue.isValidHexColor('#FF0000');
-```
-
-## ベストプラクティス
-
-### 1. 個別フックの使用
-
-パフォーマンスのため、必要な設定項目のみを取得する個別フックを使用してください：
-
-```tsx
-// ❌ 避けるべき（全体設定を取得）
-const { config } = useConfig();
-const name = config.personalInfo.name;
-
-// ✅ 推奨（必要な部分のみ取得）
-const { personalInfo } = usePersonalInfo();
-const name = personalInfo.name;
-```
-
-### 2. ローディング状態の処理
-
-ユーザー体験のため、適切なローディング表示を実装してください：
-
-```tsx
-function Component() {
-  const { personalInfo, loading } = usePersonalInfo();
-
-  if (loading) {
-    return <Skeleton />; // スケルトンローダー
-  }
-
-  return <Content data={personalInfo} />;
+interface CustomSectionProps {
+  title: string;
+  content: string;
 }
-```
 
-### 3. エラー境界の使用
-
-予期しないエラーをキャッチするため、エラー境界を設定してください：
-
-```tsx
-function App() {
+export default function CustomSection({ title, content }: CustomSectionProps) {
   return (
-    <ErrorBoundary fallback={<ErrorPage />}>
-      <ConfigProvider>
-        <MainApp />
-      </ConfigProvider>
-    </ErrorBoundary>
+    <motion.section
+      className="py-20 bg-white"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl font-bold mb-8">{title}</h2>
+        <p className="text-lg">{content}</p>
+      </div>
+    </motion.section>
   );
 }
 ```
 
-## 設定ファイルの更新
+2. **App.tsxに追加**
 
-### 開発環境
+```typescript
+import CustomSection from './components/CustomSection';
 
-開発環境では、設定ファイルを変更後にページをリロードしてください。
+// App コンポーネント内で使用
+<CustomSection
+  title="カスタムセクション"
+  content="ここにカスタムコンテンツを表示"
+/>
+```
 
-### 本番環境
+### API統合の拡張
 
-本番環境では、`public/config.json` を更新するだけで設定が反映されます（アプリケーションの再デプロイは不要）。
+新しいAPIを統合する場合：
 
-## トラブルシューティング
+1. **型定義の追加** (`src/types/`)
+2. **APIクライアントの作成** (`src/utils/`)
+3. **カスタムフックの作成** (`src/hooks/`)
+4. **コンポーネントでの使用**
 
-### よくある問題
+## 🚀 デプロイメント設定
 
-1. **設定が読み込まれない**
-   - `public/config.json` が存在するか確認
-   - JSON形式が正しいか確認
-   - ブラウザの開発者ツールでネットワークエラーを確認
+### AWS設定
 
-2. **TypeScriptエラー**
-   - 型定義が最新か確認
-   - 必要なプロパティが設定ファイルに含まれているか確認
+`scripts/aws-deploy-config.json`でAWS設定をカスタマイズ：
 
-3. **デフォルト設定が使用される**
-   - 設定ファイルの形式を確認
-   - 必須フィールドが含まれているか確認
+```json
+{
+  "region": "ap-northeast-1",
+  "s3Bucket": "your-site-bucket",
+  "cloudFrontDistributionId": "EXXXXXXXXXXXXX",
+  "profile": "default",
+  "cacheControl": "max-age=31536000",
+  "indexDocument": "index.html",
+  "errorDocument": "index.html"
+}
+```
+
+### 本番環境用設定
+
+`.env.production`で本番環境固有の設定：
+
+```bash
+VITE_YOUTUBE_API_KEY=production_api_key
+VITE_APP_URL=https://your-production-domain.com
+VITE_GA_TRACKING_ID=G-PRODUCTION-ID
+VITE_DEBUG_MODE=false
+```
+
+## 🔍 トラブルシューティング
+
+### よくある設定エラー
+
+1. **YouTube API キーエラー**
+   - `.env`ファイルが正しく設定されているか確認
+   - APIキーにYouTube Data API v3の権限があるか確認
+
+2. **設定ファイル読み込みエラー**
+   - `public/config.json`の JSON 構文が正しいか確認
+   - 必須フィールドが不足していないか確認
+
+3. **スタイル適用エラー**
+   - Tailwind CSS のクラス名が正しいか確認
+   - カスタムカラーが`tailwind.config.js`で定義されているか確認
 
 ### デバッグ方法
 
-```tsx
-import { useConfig } from '../hooks';
+1. **ブラウザの開発者ツール**でコンソールエラーを確認
+2. **Network タブ**で API リクエストの状況を確認
+3. **React Developer Tools**でコンポーネントの状態を確認
 
-function DebugComponent() {
-  const { config, loading, error } = useConfig();
+## 📚 参考資料
 
-  console.log('Config state:', { config, loading, error });
-
-  return <pre>{JSON.stringify({ config, loading, error }, null, 2)}</pre>;
-}
-```
-
-## 型定義
-
-設定に関する型定義は `src/types/index.ts` で確認できます：
-
-- `SiteConfig` - サイト全体の設定
-- `PersonalInfo` - 個人情報
-- `YouTubeChannel` - YouTubeチャンネル情報
-- `SocialLink` - ソーシャルメディアリンク
-- `ThemeConfig` - テーマ設定
+- [YouTube Data API v3 ドキュメント](https://developers.google.com/youtube/v3)
+- [Tailwind CSS ドキュメント](https://tailwindcss.com/docs)
+- [Framer Motion ドキュメント](https://www.framer.com/motion/)
+- [React Query ドキュメント](https://tanstack.com/query/latest)

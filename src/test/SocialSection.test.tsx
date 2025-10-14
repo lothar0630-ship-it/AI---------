@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SocialSection from '../components/SocialSection';
 import { SocialLink } from '../types';
@@ -79,10 +79,10 @@ describe('SocialSection Component', () => {
     });
 
     const twitterLink = screen.getByLabelText(
-      'Twitterを開く'
+      'Twitterを新しいタブで開く'
     ) as HTMLAnchorElement;
     const githubLink = screen.getByLabelText(
-      'GitHubを開く'
+      'GitHubを新しいタブで開く'
     ) as HTMLAnchorElement;
 
     expect(twitterLink.href).toBe('https://twitter.com/testuser');
@@ -95,10 +95,10 @@ describe('SocialSection Component', () => {
     });
 
     const twitterLink = screen.getByLabelText(
-      'Twitterを開く'
+      'Twitterを新しいタブで開く'
     ) as HTMLAnchorElement;
     const githubLink = screen.getByLabelText(
-      'GitHubを開く'
+      'GitHubを新しいタブで開く'
     ) as HTMLAnchorElement;
 
     // 新しいタブで開くことを確認
@@ -108,19 +108,7 @@ describe('SocialSection Component', () => {
     expect(githubLink.rel).toBe('noopener noreferrer');
   });
 
-  it('should handle scroll to bottom functionality', () => {
-    render(<SocialSection socialLinks={mockSocialLinks} />, {
-      wrapper: AllTheProviders,
-    });
-
-    const scrollButton = screen.getByLabelText('ページの最下部へ移動');
-    fireEvent.click(scrollButton);
-
-    expect(window.scrollTo).toHaveBeenCalledWith({
-      top: document.body.scrollHeight,
-      behavior: 'smooth',
-    });
-  });
+  // スクロールボタンは現在のコンポーネントに存在しないため、テストを削除
 
   it('should render section with proper accessibility attributes', () => {
     const { container } = render(

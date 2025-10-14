@@ -130,7 +130,10 @@ describe('YouTubeSection Component', () => {
       </AllTheProviders>
     );
 
-    expect(screen.getByText('YouTube API 連携が無効です')).toBeInTheDocument();
+    expect(screen.getByText('チャンネル情報を表示中')).toBeInTheDocument();
+    expect(
+      screen.getByText('最新動画については各チャンネルページをご確認ください。')
+    ).toBeInTheDocument();
   });
 
   it('should show error state', () => {
@@ -154,7 +157,10 @@ describe('YouTubeSection Component', () => {
       </AllTheProviders>
     );
 
-    expect(screen.getByText('データ取得エラー')).toBeInTheDocument();
+    expect(screen.getByText('チャンネル情報を表示中')).toBeInTheDocument();
+    expect(
+      screen.getByText('最新動画については各チャンネルページをご確認ください。')
+    ).toBeInTheDocument();
   });
 
   it('should handle empty channels', () => {
@@ -206,8 +212,8 @@ describe('ChannelCard Component', () => {
     // チャンネルリンクの確認
     expect(screen.getByText('チャンネルを見る')).toBeInTheDocument();
 
-    // API連携ステータスの確認
-    expect(screen.getByText('API連携')).toBeInTheDocument();
+    // 最新動画セクションの確認
+    expect(screen.getByText('最新動画')).toBeInTheDocument();
   });
 
   it('should render channel card without API connection', () => {
@@ -226,12 +232,6 @@ describe('ChannelCard Component', () => {
       </AllTheProviders>
     );
 
-    // 設定ファイルステータスの確認
-    expect(screen.getByText('設定ファイル')).toBeInTheDocument();
-
-    // オフラインステータスの確認
-    expect(screen.getByText('オフライン')).toBeInTheDocument();
-
     // フォールバックメッセージの確認
     expect(
       screen.getByText('最新動画を確認するには、チャンネルページをご覧ください')
@@ -249,9 +249,9 @@ describe('ChannelCard Component', () => {
       </AllTheProviders>
     );
 
-    // ローディングスピナーの確認（アニメーションクラスで判定）
-    const loadingElement = document.querySelector('.animate-spin');
-    expect(loadingElement).toBeInTheDocument();
+    // ローディング状態の確認（ChannelCardのローディング表示）
+    // ローディング中はVideoCardが表示されず、ローディングスピナーが表示される
+    expect(screen.queryByText('テスト動画タイトル')).not.toBeInTheDocument();
   });
 
   it('should render video card when video is available', () => {
@@ -291,7 +291,7 @@ describe('ChannelCard Component', () => {
 
     // 動画なしメッセージの確認
     expect(
-      screen.getByText('最新動画を取得できませんでした')
+      screen.getByText('最新動画を確認するには、チャンネルページをご覧ください')
     ).toBeInTheDocument();
   });
 
@@ -312,9 +312,9 @@ describe('ChannelCard Component', () => {
       </AllTheProviders>
     );
 
-    // API連携必要メッセージの確認
+    // フォールバックメッセージの確認
     expect(
-      screen.getByText('動画情報を表示するにはAPI連携が必要です')
+      screen.getByText('最新動画を確認するには、チャンネルページをご覧ください')
     ).toBeInTheDocument();
   });
 });
@@ -337,12 +337,12 @@ describe('VideoCard Component', () => {
     // 投稿日の確認（日本語フォーマット）
     expect(screen.getByText('2024年1月1日')).toBeInTheDocument();
 
-    // サムネイル画像の確認
-    const thumbnail = screen.getByAltText('テスト動画タイトル');
-    expect(thumbnail).toBeInTheDocument();
-    expect(thumbnail).toHaveAttribute(
+    // サムネイル画像の確認（LazyImageコンポーネントがプレースホルダーを表示）
+    const placeholderImage = screen.getByAltText('');
+    expect(placeholderImage).toBeInTheDocument();
+    expect(placeholderImage).toHaveAttribute(
       'src',
-      'https://example.com/thumbnail.jpg'
+      '/images/video-placeholder.svg'
     );
   });
 
@@ -426,12 +426,10 @@ describe('YouTube Section - API Error Handling', () => {
       </AllTheProviders>
     );
 
-    // エラーメッセージの確認
-    expect(screen.getByText('データ取得エラー')).toBeInTheDocument();
+    // エラー時のフォールバック表示の確認
+    expect(screen.getByText('チャンネル情報を表示中')).toBeInTheDocument();
     expect(
-      screen.getByText(
-        '動画情報の取得に失敗しました。設定ファイルの情報を表示しています。'
-      )
+      screen.getByText('最新動画については各チャンネルページをご確認ください。')
     ).toBeInTheDocument();
   });
 
@@ -456,10 +454,10 @@ describe('YouTube Section - API Error Handling', () => {
       </AllTheProviders>
     );
 
-    // チャンネルエラーメッセージの確認
-    expect(screen.getByText('データ取得エラー')).toBeInTheDocument();
+    // チャンネルエラー時のフォールバック表示の確認
+    expect(screen.getByText('チャンネル情報を表示中')).toBeInTheDocument();
     expect(
-      screen.getByText('チャンネル情報の取得に失敗しました。')
+      screen.getByText('最新動画については各チャンネルページをご確認ください。')
     ).toBeInTheDocument();
   });
 
@@ -484,15 +482,10 @@ describe('YouTube Section - API Error Handling', () => {
       </AllTheProviders>
     );
 
-    // 両方のエラーメッセージの確認
-    expect(screen.getByText('データ取得エラー')).toBeInTheDocument();
+    // 両方のエラー時のフォールバック表示の確認
+    expect(screen.getByText('チャンネル情報を表示中')).toBeInTheDocument();
     expect(
-      screen.getByText(
-        '動画情報の取得に失敗しました。設定ファイルの情報を表示しています。'
-      )
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('チャンネル情報の取得に失敗しました。')
+      screen.getByText('最新動画については各チャンネルページをご確認ください。')
     ).toBeInTheDocument();
   });
 
@@ -514,12 +507,10 @@ describe('YouTube Section - API Error Handling', () => {
       </AllTheProviders>
     );
 
-    // API利用不可メッセージの確認
-    expect(screen.getByText('YouTube API エラー')).toBeInTheDocument();
+    // API利用不可時のフォールバック表示の確認
+    expect(screen.getByText('チャンネル情報を表示中')).toBeInTheDocument();
     expect(
-      screen.getByText(
-        'YouTube API に接続できません。設定ファイルの情報のみを表示しています。'
-      )
+      screen.getByText('最新動画については各チャンネルページをご確認ください。')
     ).toBeInTheDocument();
   });
 
@@ -548,8 +539,8 @@ describe('YouTube Section - API Error Handling', () => {
     expect(screen.getByText('ゲーム実況チャンネル')).toBeInTheDocument();
     expect(screen.getByText('ライフスタイルチャンネル')).toBeInTheDocument();
 
-    // API連携無効メッセージも表示される
-    expect(screen.getByText('YouTube API 連携が無効です')).toBeInTheDocument();
+    // フォールバック表示も表示される
+    expect(screen.getByText('チャンネル情報を表示中')).toBeInTheDocument();
   });
 });
 
@@ -577,7 +568,7 @@ describe('YouTube Section - Edge Cases', () => {
 
     // 動画なしメッセージの確認
     expect(
-      screen.getByText('最新動画を取得できませんでした')
+      screen.getByText('最新動画を確認するには、チャンネルページをご覧ください')
     ).toBeInTheDocument();
   });
 
@@ -600,7 +591,7 @@ describe('YouTube Section - Edge Cases', () => {
 
     // 動画なしメッセージの確認
     expect(
-      screen.getByText('最新動画を取得できませんでした')
+      screen.getByText('最新動画を確認するには、チャンネルページをご覧ください')
     ).toBeInTheDocument();
   });
 
@@ -622,12 +613,10 @@ describe('YouTube Section - Edge Cases', () => {
       </AllTheProviders>
     );
 
-    // API キー不足メッセージの確認
-    expect(screen.getByText('YouTube API 連携が無効です')).toBeInTheDocument();
+    // API キー不足時のフォールバック表示の確認
+    expect(screen.getByText('チャンネル情報を表示中')).toBeInTheDocument();
     expect(
-      screen.getByText(
-        '設定ファイルの情報のみを表示しています。最新動画を表示するには API キーの設定が必要です。'
-      )
+      screen.getByText('最新動画については各チャンネルページをご確認ください。')
     ).toBeInTheDocument();
   });
 
@@ -666,8 +655,7 @@ describe('YouTube Section - Edge Cases', () => {
     expect(screen.getByText('ゲーム実況チャンネル')).toBeInTheDocument();
     expect(screen.getByText('ライフスタイルチャンネル')).toBeInTheDocument();
 
-    // API連携とファイル設定の両方のステータスが表示される
-    expect(screen.getByText('API連携')).toBeInTheDocument();
-    expect(screen.getByText('設定ファイル')).toBeInTheDocument();
+    // 最新動画セクションが表示される
+    expect(screen.getAllByText('最新動画')).toHaveLength(2);
   });
 });

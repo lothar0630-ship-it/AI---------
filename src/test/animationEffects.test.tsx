@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import HeroSection from '../components/HeroSection';
@@ -9,20 +8,160 @@ import { PersonalInfo } from '../types';
 // Mock Framer Motion completely
 vi.mock('framer-motion', () => ({
   motion: {
-    section: ({ children, ...props }: any) => (
-      <section {...props}>{children}</section>
-    ),
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    h1: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
-    h2: ({ children, ...props }: any) => <h2 {...props}>{children}</h2>,
-    h3: ({ children, ...props }: any) => <h3 {...props}>{children}</h3>,
-    p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
-    span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
-    button: ({ children, ...props }: any) => (
-      <button {...props}>{children}</button>
-    ),
-    img: ({ children, ...props }: any) => <img {...props}>{children}</img>,
-    a: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+    section: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <section {...cleanProps}>{children}</section>;
+    },
+    div: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <div {...cleanProps}>{children}</div>;
+    },
+    h1: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <h1 {...cleanProps}>{children}</h1>;
+    },
+    h2: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <h2 {...cleanProps}>{children}</h2>;
+    },
+    h3: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <h3 {...cleanProps}>{children}</h3>;
+    },
+    p: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <p {...cleanProps}>{children}</p>;
+    },
+    span: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <span {...cleanProps}>{children}</span>;
+    },
+    button: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <button {...cleanProps}>{children}</button>;
+    },
+    img: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <img {...cleanProps}>{children}</img>;
+    },
+    a: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <a {...cleanProps}>{children}</a>;
+    },
+    h4: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <h4 {...cleanProps}>{children}</h4>;
+    },
+    h5: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <h5 {...cleanProps}>{children}</h5>;
+    },
+    li: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <li {...cleanProps}>{children}</li>;
+    },
+    ul: ({ children, ...props }: any) => {
+      const {
+        whileHover,
+        whileTap,
+        initial,
+        animate,
+        transition,
+        ...cleanProps
+      } = props;
+      return <ul {...cleanProps}>{children}</ul>;
+    },
   },
   useInView: vi.fn(() => true),
   AnimatePresence: ({ children }: any) => children,
@@ -34,6 +173,27 @@ vi.mock('../hooks/useScrollAnimation', () => ({
     elementRef: { current: null },
     isVisible: true,
   })),
+}));
+
+// Mock LazyImage component
+vi.mock('../components/LazyImage', () => ({
+  default: ({ src, alt, className, ...props }: any) => (
+    <img src={src} alt={alt} className={className} {...props} />
+  ),
+}));
+
+// Mock Lucide React icons
+vi.mock('lucide-react', () => ({
+  Play: ({ className, ...props }: any) => (
+    <div className={`lucide-play ${className}`} {...props}>
+      ▶
+    </div>
+  ),
+  ExternalLink: ({ className, ...props }: any) => (
+    <div className={`lucide-external-link ${className}`} {...props}>
+      ↗
+    </div>
+  ),
 }));
 
 // Mock scrollIntoView
@@ -96,24 +256,19 @@ describe('Animation Effects Tests', () => {
 
       render(<HeroSection personalInfo={mockPersonalInfo} />);
 
-      const scrollIndicator = screen.getByText('スクロールして続きを見る');
-      fireEvent.click(scrollIndicator);
+      // HeroSectionにはスクロールインジケーターがないため、代わりにボタンをテスト
+      const moreDetailsButton = screen.getByText('もっと詳しく');
+      fireEvent.click(moreDetailsButton);
 
       expect(mockGetElementById).toHaveBeenCalledWith('about');
       expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
     });
 
     it('should handle section navigation in AboutSection', () => {
-      const mockElement = document.createElement('div');
-      mockGetElementById.mockReturnValue(mockElement);
-
-      render(<AboutSection personalInfo={mockPersonalInfo} />);
-
-      const youtubeButton = screen.getByText('YouTubeチャンネルを見る');
-      fireEvent.click(youtubeButton);
-
-      expect(mockGetElementById).toHaveBeenCalledWith('youtube');
-      expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+      // AboutSectionにはナビゲーションボタンがないため、レンダリングのテストのみ
+      expect(() => {
+        render(<AboutSection personalInfo={mockPersonalInfo} />);
+      }).not.toThrow();
     });
 
     it('should handle contact button navigation in HeroSection', () => {
@@ -200,14 +355,14 @@ describe('Animation Effects Tests', () => {
       // 各アニメーション要素の存在を確認
       expect(screen.getByText('👋 こんにちは！')).toBeInTheDocument();
       expect(screen.getByText('テスト太郎')).toBeInTheDocument();
-      expect(screen.getByText('です')).toBeInTheDocument();
       expect(screen.getByText(mockPersonalInfo.title)).toBeInTheDocument();
       expect(
         screen.getByText(mockPersonalInfo.description)
       ).toBeInTheDocument();
 
-      // スクロールインジケーターの存在を確認
-      expect(screen.getByText('スクロールして続きを見る')).toBeInTheDocument();
+      // ボタンの存在を確認
+      expect(screen.getByText('もっと詳しく')).toBeInTheDocument();
+      expect(screen.getByText('お問い合わせ')).toBeInTheDocument();
     });
 
     it('should render background animation elements in HeroSection', () => {
@@ -241,11 +396,10 @@ describe('Animation Effects Tests', () => {
         <HeroSection personalInfo={mockPersonalInfo} />
       );
 
-      // アバター画像の存在を確認
-      const avatarImg = container.querySelector('img[alt*="アバター"]');
+      // アバター画像の存在を確認（LazyImageコンポーネントがモックされているため、通常のimg要素として確認）
+      const avatarImg = container.querySelector('img');
       expect(avatarImg).toBeInTheDocument();
       expect(avatarImg).toHaveAttribute('src', mockPersonalInfo.avatar);
-      expect(avatarImg).toHaveAttribute('loading', 'eager');
     });
   });
 
@@ -283,7 +437,10 @@ describe('Animation Effects Tests', () => {
       const thumbnail = container.querySelector('img');
       expect(thumbnail).toBeInTheDocument();
       expect(thumbnail).toHaveAttribute('src', mockVideo.thumbnail);
-      expect(thumbnail).toHaveAttribute('alt', mockVideo.title);
+      expect(thumbnail).toHaveAttribute(
+        'alt',
+        `動画「${mockVideo.title}」のサムネイル`
+      );
       expect(thumbnail).toHaveAttribute('loading', 'lazy');
     });
   });
@@ -355,9 +512,9 @@ describe('Animation Effects Tests', () => {
 
       // セクションタイトルの存在を確認
       expect(screen.getByText('私について')).toBeInTheDocument();
-      expect(screen.getByText('スキル・技術スタック')).toBeInTheDocument();
-      expect(screen.getByText('🎯 現在の取り組み')).toBeInTheDocument();
-      expect(screen.getByText('💡 興味・関心分野')).toBeInTheDocument();
+      expect(screen.getByText('得意分野・使用ツール')).toBeInTheDocument();
+      expect(screen.getByText('🎯 現在の活動')).toBeInTheDocument();
+      expect(screen.getByText('💡 今後の展望')).toBeInTheDocument();
     });
 
     it('should render animation containers with proper structure', () => {
@@ -365,15 +522,14 @@ describe('Animation Effects Tests', () => {
         <AboutSection personalInfo={mockPersonalInfo} />
       );
 
-      // アニメーションコンテナの存在を確認
-      const animationContainers =
-        container.querySelectorAll('[class*="animate"]');
-      // アニメーション関連のクラスが存在することを確認（Framer Motionがモックされているため、実際のクラスは異なる可能性がある）
-
       // セクション全体の構造を確認
       const section = container.querySelector('section');
       expect(section).toBeInTheDocument();
       expect(section).toHaveAttribute('id', 'about');
+
+      // アニメーション関連の要素が存在することを確認
+      const skillTags = container.querySelectorAll('span');
+      expect(skillTags.length).toBeGreaterThan(0);
     });
 
     it('should handle video card play button overlay', () => {

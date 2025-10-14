@@ -1,0 +1,76 @@
+{
+  "aws": {
+    "region": "us-east-1",
+    "s3": {
+      "bucketName": "your-personal-portal-bucket",
+      "bucketPolicy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::your-personal-portal-bucket/*"
+          }
+        ]
+      },
+      "websiteConfiguration": {
+        "IndexDocument": {
+          "Suffix": "index.html"
+        },
+        "ErrorDocument": {
+          "Key": "index.html"
+        }
+      }
+    },
+    "cloudfront": {
+      "distributionConfig": {
+        "CallerReference": "personal-portal-distribution",
+        "Comment": "Personal Portal Site Distribution",
+        "DefaultCacheBehavior": {
+          "TargetOriginId": "S3-personal-portal",
+          "ViewerProtocolPolicy": "redirect-to-https",
+          "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+          "Compress": true
+        },
+        "Origins": {
+          "Quantity": 1,
+          "Items": [
+            {
+              "Id": "S3-personal-portal",
+              "DomainName": "your-personal-portal-bucket.s3.amazonaws.com",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": ""
+              }
+            }
+          ]
+        },
+        "Enabled": true,
+        "PriceClass": "PriceClass_100",
+        "CustomErrorResponses": {
+          "Quantity": 1,
+          "Items": [
+            {
+              "ErrorCode": 404,
+              "ResponsePagePath": "/index.html",
+              "ResponseCode": "200",
+              "ErrorCachingMinTTL": 300
+            }
+          ]
+        }
+      }
+    }
+  },
+  "deployment": {
+    "syncOptions": {
+      "delete": true,
+      "exclude": [".git/*", "node_modules/*", "src/*", "*.md", ".env*"]
+    },
+    "cacheControl": {
+      "html": "no-cache",
+      "assets": "max-age=31536000",
+      "images": "max-age=31536000"
+    }
+  }
+}

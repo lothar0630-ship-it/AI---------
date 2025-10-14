@@ -91,6 +91,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ personalInfo }) => {
                   onLoad={handleImageLoad}
                   onError={handleImageError}
                   placeholder="/images/avatar-placeholder.svg"
+                  aria-describedby="hero-heading"
                 />
               </motion.div>
 

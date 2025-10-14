@@ -1,46 +1,33 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { createYouTubeClient, YouTubeAPIClient } from '../utils/youtubeApi';
 
-// 環境変数のモック
-const mockEnv = vi.hoisted(() => ({
-  VITE_YOUTUBE_API_KEY: 'test-api-key',
-}));
-
+// Mock import.meta.env
 vi.mock('import.meta', () => ({
-  env: mockEnv,
+  env: {
+    VITE_YOUTUBE_API_KEY: 'test-api-key',
+  },
 }));
 
 describe('createYouTubeClient', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('should create client when API key is available', async () => {
-    mockEnv.VITE_YOUTUBE_API_KEY = 'test-api-key';
-
-    // 動的インポートでモジュールを再読み込み
-    const { createYouTubeClient, YouTubeAPIClient } = await import(
-      '../utils/youtubeApi'
-    );
+  it('should create client when API key is available', () => {
+    // Mock with valid API key
+    vi.mocked(import.meta.env).VITE_YOUTUBE_API_KEY = 'test-api-key';
 
     const client = createYouTubeClient();
     expect(client).toBeInstanceOf(YouTubeAPIClient);
   });
 
-  it('should return null when API key is missing', async () => {
-    mockEnv.VITE_YOUTUBE_API_KEY = '';
-
-    // 動的インポートでモジュールを再読み込み
-    const { createYouTubeClient } = await import('../utils/youtubeApi');
+  it('should return null when API key is missing', () => {
+    // Mock with empty API key
+    vi.mocked(import.meta.env).VITE_YOUTUBE_API_KEY = '';
 
     const client = createYouTubeClient();
     expect(client).toBeNull();
   });
 
-  it('should return null when API key is undefined', async () => {
-    mockEnv.VITE_YOUTUBE_API_KEY = undefined;
-
-    // 動的インポートでモジュールを再読み込み
-    const { createYouTubeClient } = await import('../utils/youtubeApi');
+  it('should return null when API key is undefined', () => {
+    // Mock with undefined API key by deleting the property
+    delete vi.mocked(import.meta.env).VITE_YOUTUBE_API_KEY;
 
     const client = createYouTubeClient();
     expect(client).toBeNull();

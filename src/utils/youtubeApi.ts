@@ -344,7 +344,7 @@ export class YouTubeAPIClient {
       const response = await fetch(url);
 
       // レート制限やサーバーエラーの場合はリトライ
-      if (response.status === 429 || response.status >= 500) {
+      if (response && (response.status === 429 || response.status >= 500)) {
         if (attempt < this.config.retryAttempts!) {
           await this.delay(this.config.retryDelay! * attempt);
           return this.fetchWithRetry(url, attempt + 1);

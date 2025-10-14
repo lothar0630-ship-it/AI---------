@@ -84,7 +84,9 @@ describe('SocialLink Component', () => {
       wrapper: AllTheProviders,
     });
 
-    const link = screen.getByLabelText('Twitterを開く') as HTMLAnchorElement;
+    const link = screen.getByLabelText(
+      'Twitterを新しいタブで開く'
+    ) as HTMLAnchorElement;
 
     // ソーシャルリンクの動作テスト (要件 4.1)
     expect(link.href).toBe('https://twitter.com/testuser');
@@ -109,12 +111,14 @@ describe('SocialLink Component', () => {
       wrapper: AllTheProviders,
     });
 
-    const link = screen.getByLabelText('Twitterを開く');
+    const link = screen.getByLabelText('Twitterを新しいタブで開く');
     const linkElement = link as HTMLAnchorElement;
 
     // リンクが正しく設定されていることを確認
     expect(linkElement.href).toBe('https://twitter.com/testuser');
-    expect(linkElement.getAttribute('aria-label')).toBe('Twitterを開く');
+    expect(linkElement.getAttribute('aria-label')).toBe(
+      'Twitterを新しいタブで開く'
+    );
   });
 
   it('should handle different social platforms correctly', () => {
@@ -147,7 +151,7 @@ describe('SocialLink Component', () => {
     });
 
     // 外部リンクアイコンが存在することを確認（SVGとして）
-    const link = screen.getByLabelText('Twitterを開く');
+    const link = screen.getByLabelText('Twitterを新しいタブで開く');
     const svgElements = link.querySelectorAll('svg');
 
     // プラットフォームアイコンと外部リンクアイコンの2つのSVGが存在することを確認

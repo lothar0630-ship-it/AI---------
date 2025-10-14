@@ -110,7 +110,7 @@ export const YouTubeSection: React.FC<YouTubeSectionProps> = ({ channels }) => {
           )}
 
           {/* エラー状態 */}
-          {(error.videos || error.channels) && (
+          {(error?.videos || error?.channels) && (
             <motion.div
               className="mb-8 p-6 bg-blue-50 border border-blue-200 rounded-lg text-center"
               initial={{ opacity: 0, x: -20 }}
@@ -148,7 +148,7 @@ export const YouTubeSection: React.FC<YouTubeSectionProps> = ({ channels }) => {
               animate={{ opacity: isInView ? 1 : 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              {youtubeData.map((channelData, index) => (
+              {youtubeData?.map((channelData, index) => (
                 <motion.div
                   key={channelData.id}
                   initial={{ opacity: 0, y: 50, scale: 0.9 }}
