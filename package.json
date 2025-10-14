@@ -10,6 +10,8 @@
     "build:analyze": "npm run build && npm run test:bundle",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:simple": "eslint . --ext ts,tsx --config .eslintrc.simple.cjs --report-unused-disable-directives --max-warnings 0",
+    "lint:fallback": "eslint . --ext js,jsx,ts,tsx --config .eslintrc.fallback.cjs --max-warnings 0",
+    "lint:minimal": "eslint . --ext js,jsx,ts,tsx --config .eslintrc.minimal.cjs --max-warnings 10",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "test": "vitest --run",
