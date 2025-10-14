@@ -10,6 +10,13 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     setupFiles: ['./src/test/setup.ts'],
+    env: {
+      VITE_YOUTUBE_API_KEY: 'test-api-key-for-testing',
+      VITE_APP_TITLE: 'Personal Portal Site',
+      VITE_APP_DESCRIPTION: 'Modern personal portfolio and social media hub',
+      VITE_DEV_MODE: 'false',
+      VITE_NODE_ENV: 'test',
+    },
   },
   resolve: {
     alias: {

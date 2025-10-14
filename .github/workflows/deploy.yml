@@ -64,9 +64,17 @@ jobs:
 
       - name: Run tests
         run: npm run test
+        env:
+          VITE_YOUTUBE_API_KEY: ${{ secrets.VITE_YOUTUBE_API_KEY || 'test-api-key-for-testing' }}
+          VITE_APP_TITLE: ${{ vars.VITE_APP_TITLE || 'Personal Portal Site' }}
+          VITE_APP_DESCRIPTION: ${{ vars.VITE_APP_DESCRIPTION || 'Modern personal portfolio and social media hub' }}
 
       - name: Run performance tests
         run: npm run test:performance
+        env:
+          VITE_YOUTUBE_API_KEY: ${{ secrets.VITE_YOUTUBE_API_KEY || 'test-api-key-for-testing' }}
+          VITE_APP_TITLE: ${{ vars.VITE_APP_TITLE || 'Personal Portal Site' }}
+          VITE_APP_DESCRIPTION: ${{ vars.VITE_APP_DESCRIPTION || 'Modern personal portfolio and social media hub' }}
 
   build:
     needs: test

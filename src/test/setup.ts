@@ -1,5 +1,27 @@
 import '@testing-library/jest-dom';
 
+// テスト用環境変数の設定
+if (!import.meta.env.VITE_YOUTUBE_API_KEY) {
+  Object.defineProperty(import.meta.env, 'VITE_YOUTUBE_API_KEY', {
+    value: 'test-api-key-for-testing',
+    writable: true,
+  });
+}
+
+if (!import.meta.env.VITE_APP_TITLE) {
+  Object.defineProperty(import.meta.env, 'VITE_APP_TITLE', {
+    value: 'Personal Portal Site',
+    writable: true,
+  });
+}
+
+if (!import.meta.env.VITE_APP_DESCRIPTION) {
+  Object.defineProperty(import.meta.env, 'VITE_APP_DESCRIPTION', {
+    value: 'Modern personal portfolio and social media hub',
+    writable: true,
+  });
+}
+
 // グローバルなテスト設定
 global.ResizeObserver = class ResizeObserver {
   observe() {}
