@@ -35,7 +35,10 @@
     "env:prod": "node scripts/env-setup.cjs production",
     "env:staging": "node scripts/env-setup.cjs staging",
     "env:validate": "node scripts/env-setup.cjs validate",
-    "env:list": "node scripts/env-setup.cjs list"
+    "env:list": "node scripts/env-setup.cjs list",
+    "secure:s3": "node scripts/secure-s3-cloudfront.js",
+    "favicon:generate": "node scripts/generate-favicons.cjs",
+    "favicon:validate": "node scripts/generate-favicons.cjs validate"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
