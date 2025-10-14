@@ -200,8 +200,8 @@ const AboutSection: React.FC<AboutSectionProps> = ({ personalInfo }) => {
                       className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full text-responsive-sm font-semibold border border-primary/20 cursor-default focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                       whileHover={{
                         scale: 1.05,
-                        backgroundColor: 'var(--color-primary)',
-                        color: 'white',
+                        backgroundColor: '#3B82F6',
+                        color: '#FFFFFF',
                         boxShadow:
                           '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
                       }}

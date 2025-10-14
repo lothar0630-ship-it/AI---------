@@ -84,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({ personalInfo }) => {
     }
   }, [isMenuOpen]);
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = (sectionId: string, shouldBlurFocus = false) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -98,6 +98,11 @@ const Header: React.FC<HeaderProps> = ({ personalInfo }) => {
       liveRegionManager.announceNavigation(
         sectionNames[sectionId] || sectionId
       );
+
+      // ホームボタンの場合はフォーカスを外す
+      if (shouldBlurFocus && document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
     }
     setIsMenuOpen(false);
   };
@@ -119,8 +124,8 @@ const Header: React.FC<HeaderProps> = ({ personalInfo }) => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <button
-              onClick={() => scrollToSection('hero')}
-              className="text-2xl font-bold text-primary hover:text-primary-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md px-2 py-1"
+              onClick={() => scrollToSection('hero', true)}
+              className="text-2xl font-bold text-primary hover:text-primary-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-md px-2 py-1"
               aria-label="ホームに戻る"
             >
               {personalInfo?.name || 'Portfolio'}.dev
@@ -137,7 +142,7 @@ const Header: React.FC<HeaderProps> = ({ personalInfo }) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-secondary-600 hover:text-primary font-medium px-3 py-2 rounded-md text-sm transition-colors duration-200 focus:outline-none"
+                  className="text-secondary-600 hover:text-primary font-medium px-3 py-2 rounded-md text-sm transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   aria-label={`${item.label}セクションに移動`}
                   role="menuitem"
                 >
@@ -152,7 +157,7 @@ const Header: React.FC<HeaderProps> = ({ personalInfo }) => {
             <button
               ref={menuButtonRef}
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-secondary-600 hover:text-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-colors duration-200"
+              className="inline-flex items-center justify-center p-2 rounded-md text-secondary-600 hover:text-primary hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition-colors duration-200"
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
               aria-label={isMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
@@ -181,7 +186,7 @@ const Header: React.FC<HeaderProps> = ({ personalInfo }) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-secondary-600 hover:text-primary block px-3 py-2 rounded-md text-base font-medium w-full text-left transition-colors duration-200 focus:outline-none"
+                  className="text-secondary-600 hover:text-primary block px-3 py-2 rounded-md text-base font-medium w-full text-left transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   role="menuitem"
                   aria-label={`${item.label}セクションに移動`}
                   tabIndex={isMenuOpen ? 0 : -1}

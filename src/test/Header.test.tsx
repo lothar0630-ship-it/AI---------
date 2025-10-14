@@ -172,6 +172,13 @@ describe('Header Component', () => {
 
         expect(mockGetElementById).toHaveBeenCalledWith('about');
         expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+
+        // Check that mobile navigation items have proper focus-visible styles
+        expect(mobileAboutButton).toHaveClass(
+          'focus:outline-none',
+          'focus-visible:ring-2',
+          'focus-visible:ring-primary'
+        );
       }
     });
 
@@ -239,6 +246,34 @@ describe('Header Component', () => {
     });
   });
 
+  describe('フォーカス管理テスト', () => {
+    it('should call scrollToSection with blur parameter for home button', async () => {
+      const mockElement = document.createElement('div');
+      mockGetElementById.mockReturnValue(mockElement);
+
+      render(<Header personalInfo={mockPersonalInfo} />);
+
+      const logoButton = screen.getByLabelText('ホームに戻る');
+      await userEvent.click(logoButton);
+
+      expect(mockGetElementById).toHaveBeenCalledWith('hero');
+      expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+    });
+
+    it('should call scrollToSection without blur parameter for other navigation buttons', async () => {
+      const mockElement = document.createElement('div');
+      mockGetElementById.mockReturnValue(mockElement);
+
+      render(<Header personalInfo={mockPersonalInfo} />);
+
+      const aboutButton = screen.getByLabelText('Aboutセクションに移動');
+      await userEvent.click(aboutButton);
+
+      expect(mockGetElementById).toHaveBeenCalledWith('about');
+      expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+    });
+  });
+
   describe('アクセシビリティテスト', () => {
     it('should have proper ARIA labels for all interactive elements', () => {
       render(<Header personalInfo={mockPersonalInfo} />);
@@ -270,20 +305,16 @@ describe('Header Component', () => {
       expect(menuButton).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('should have proper focus management', async () => {
+    it('should have proper focus management', () => {
       render(<Header personalInfo={mockPersonalInfo} />);
 
       const logoButton = screen.getByLabelText('ホームに戻る');
 
-      // Focus the logo button
-      logoButton.focus();
-      expect(logoButton).toHaveFocus();
-
-      // Should have focus styles
+      // Should have focus styles (focus-visible for keyboard navigation)
       expect(logoButton).toHaveClass(
         'focus:outline-none',
-        'focus:ring-2',
-        'focus:ring-primary'
+        'focus-visible:ring-2',
+        'focus-visible:ring-primary'
       );
     });
 
@@ -294,6 +325,27 @@ describe('Header Component', () => {
       const icon = menuButton.querySelector('svg');
 
       expect(icon).toHaveAttribute('aria-hidden', 'true');
+    });
+
+    it('should have proper focus-visible styles for all navigation buttons', () => {
+      render(<Header personalInfo={mockPersonalInfo} />);
+
+      // Check desktop navigation buttons
+      const aboutButton = screen.getByLabelText('Aboutセクションに移動');
+      expect(aboutButton).toHaveClass(
+        'focus:outline-none',
+        'focus-visible:ring-2',
+        'focus-visible:ring-primary'
+      );
+
+      // Check mobile menu button
+      const mobileMenuButton = screen.getByLabelText('メニューを開く');
+      expect(mobileMenuButton).toHaveClass(
+        'focus:outline-none',
+        'focus-visible:ring-2',
+        'focus-visible:ring-inset',
+        'focus-visible:ring-primary'
+      );
     });
   });
 

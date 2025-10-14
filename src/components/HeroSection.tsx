@@ -221,8 +221,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ personalInfo }) => {
                   aria-label="お問い合わせセクションに移動"
                   whileHover={{
                     scale: 1.05,
-                    backgroundColor: 'var(--color-primary)',
-                    color: 'white',
+                    backgroundColor: '#3B82F6',
+                    color: '#FFFFFF',
                     boxShadow:
                       '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
                   }}
