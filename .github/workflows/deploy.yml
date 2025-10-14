@@ -158,7 +158,6 @@ jobs:
             --include "*.json"
 
       - name: Invalidate CloudFront
-        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
         run: |
           if [ -n "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" ]; then
             echo "🔄 CloudFrontキャッシュを無効化中..."
