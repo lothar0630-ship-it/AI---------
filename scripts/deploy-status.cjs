@@ -22,7 +22,11 @@ class DeploymentStatusMonitor {
     try {
       this.validateConfiguration();
       await this.checkS3Status();
-      await this.checkCloudFrontStatus();
+
+      if (this.distributionId) {
+        await this.checkCloudFrontStatus();
+      }
+
       await this.checkWebsiteHealth();
 
       console.log('✅ All deployment checks passed!');
@@ -33,9 +37,13 @@ class DeploymentStatusMonitor {
   }
 
   validateConfiguration() {
-    if (!this.bucketName || !this.distributionId) {
-      throw new Error(
-        'Missing S3_BUCKET_NAME or CLOUDFRONT_DISTRIBUTION_ID environment variables'
+    if (!this.bucketName) {
+      throw new Error('Missing S3_BUCKET_NAME environment variable');
+    }
+
+    if (!this.distributionId) {
+      console.log(
+        '⚠️  CLOUDFRONT_DISTRIBUTION_ID not set - CloudFront checks will be skipped'
       );
     }
   }
@@ -137,15 +145,17 @@ class DeploymentStatusMonitor {
 
     // Get CloudFront domain
     let cloudFrontUrl;
-    try {
-      const result = execSync(
-        `aws cloudfront get-distribution --id ${this.distributionId}`,
-        { encoding: 'utf8' }
-      );
-      const distribution = JSON.parse(result);
-      cloudFrontUrl = `https://${distribution.Distribution.DomainName}`;
-    } catch (error) {
-      console.log('⚠️  Could not retrieve CloudFront URL');
+    if (this.distributionId) {
+      try {
+        const result = execSync(
+          `aws cloudfront get-distribution --id ${this.distributionId}`,
+          { encoding: 'utf8' }
+        );
+        const distribution = JSON.parse(result);
+        cloudFrontUrl = `https://${distribution.Distribution.DomainName}`;
+      } catch (error) {
+        console.log('⚠️  Could not retrieve CloudFront URL');
+      }
     }
 
     // Check S3 website endpoint

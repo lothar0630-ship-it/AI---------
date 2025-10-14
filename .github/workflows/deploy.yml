@@ -158,15 +158,26 @@ jobs:
             --include "*.json"
 
       - name: Invalidate CloudFront
+        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
         run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-            --paths "/*"
+          if [ -n "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" ]; then
+            echo "🔄 CloudFrontキャッシュを無効化中..."
+            aws cloudfront create-invalidation \
+              --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+              --paths "/*"
+            echo "✅ CloudFrontキャッシュ無効化完了"
+          else
+            echo "⚠️  CLOUDFRONT_DISTRIBUTION_IDが設定されていません。CloudFrontキャッシュ無効化をスキップします。"
+          fi
 
       - name: Post-deployment status check
         run: |
           echo "🔍 Running post-deployment status check..."
           npm run deploy:status
+        env:
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          AWS_REGION: ${{ env.AWS_REGION }}
 
       - name: Deployment notification
         run: |
@@ -176,8 +187,18 @@ jobs:
           echo "📋 Verification report:"
           cat dist/verification-report.json
           echo ""
-          echo "🌐 Your site is being deployed to CloudFront..."
-          echo "⏳ It may take 5-15 minutes for changes to be visible globally."
+          echo "🌐 デプロイ情報:"
+          echo "   S3バケット: ${{ secrets.S3_BUCKET_NAME }}"
+          echo "   リージョン: ${{ env.AWS_REGION }}"
+          if [ -n "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" ]; then
+            echo "   CloudFront: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
+            echo "🌐 Your site is being deployed to CloudFront..."
+            echo "⏳ It may take 5-15 minutes for changes to be visible globally."
+          else
+            echo "   CloudFront: 未設定"
+            echo "🌐 Your site is deployed to S3!"
+            echo "💡 CloudFrontを設定すると、グローバルCDNとカスタムドメインが利用できます。"
+          fi
 
       - name: Deployment failure notification
         if: failure()
