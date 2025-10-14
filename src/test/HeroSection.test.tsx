@@ -504,8 +504,8 @@ describe('HeroSection Component', () => {
         'rounded-full'
       );
 
-      // ホバー効果は#3B82F6（blue-500）の色に変更されることをコメントで記録
-      // whileHover: { backgroundColor: '#3B82F6', color: '#FFFFFF' }
+      // ホバー効果は#059669（emerald-600）の色に変更されることをコメントで記録
+      // whileHover: { backgroundColor: '#059669', color: '#FFFFFF' }
     });
 
     it('should have proper shadow and border radius styles', () => {
