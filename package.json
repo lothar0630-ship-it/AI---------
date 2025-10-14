@@ -28,6 +28,7 @@
     "deploy:status": "node scripts/deploy-status.cjs",
     "deploy:test": "node scripts/deployment-test.cjs",
     "aws:setup": "node scripts/aws-setup.cjs",
+    "aws:infrastructure": "node scripts/setup-aws-infrastructure.js",
     "aws:status": "node scripts/deploy-status.cjs",
     "env:setup": "node scripts/env-setup.cjs",
     "env:dev": "node scripts/env-setup.cjs development",

@@ -9,7 +9,7 @@ on:
 
 env:
   NODE_VERSION: '20'
-  AWS_REGION: 'us-east-1'
+  AWS_REGION: 'ap-southeast-2'
 
 jobs:
   test:
