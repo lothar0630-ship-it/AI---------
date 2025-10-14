@@ -2,7 +2,7 @@
   "aws": {
     "region": "us-east-1",
     "s3": {
-      "bucketName": "your-personal-portal-bucket",
+      "bucketName": "lothar-personal-portal-bucket",
       "bucketPolicy": {
         "Version": "2012-10-17",
         "Statement": [
@@ -11,7 +11,7 @@
             "Effect": "Allow",
             "Principal": "*",
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::your-personal-portal-bucket/*"
+            "Resource": "arn:aws:s3:::lothar-personal-portal-bucket/*"
           }
         ]
       },
@@ -39,7 +39,7 @@
           "Items": [
             {
               "Id": "S3-personal-portal",
-              "DomainName": "your-personal-portal-bucket.s3.amazonaws.com",
+              "DomainName": "lothar-personal-portal-bucket.s3.amazonaws.com",
               "S3OriginConfig": {
                 "OriginAccessIdentity": ""
               }

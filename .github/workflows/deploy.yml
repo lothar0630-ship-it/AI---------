@@ -25,8 +25,21 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Verify ESLint dependencies
+        run: |
+          echo "Checking ESLint dependencies..."
+          npm list @typescript-eslint/eslint-plugin @typescript-eslint/parser || npm install @typescript-eslint/eslint-plugin @typescript-eslint/parser
 
       - name: Run linter
         run: npm run lint
@@ -51,8 +64,16 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Build application
         run: npm run deploy:build
