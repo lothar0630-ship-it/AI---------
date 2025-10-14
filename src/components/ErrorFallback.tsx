@@ -18,7 +18,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
         {componentName} の読み込み中にエラーが発生しました。
       </p>
 
-      {process.env.NODE_ENV === 'development' && error && (
+      {import.meta.env.DEV && error && (
         <details className="mb-3">
           <summary className="text-xs text-red-700 cursor-pointer">
             エラー詳細 (開発環境のみ)

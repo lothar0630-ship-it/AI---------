@@ -118,8 +118,8 @@ class GlobalErrorHandler {
 
 // Create singleton instance
 export const globalErrorHandler = new GlobalErrorHandler({
-  enableLogging: process.env.NODE_ENV === 'development',
-  enableReporting: process.env.NODE_ENV === 'production',
+  enableLogging: import.meta.env.DEV,
+  enableReporting: import.meta.env.PROD,
   maxErrors: 100,
 });
 

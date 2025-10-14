@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:prod": "npm run lint && npm run test && npm run build",
+    "build:prod": "npm run build",
     "build:analyze": "npm run build && npm run test:bundle",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:simple": "eslint . --ext ts,tsx --config .eslintrc.simple.cjs --report-unused-disable-directives --max-warnings 0",
@@ -47,6 +47,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20.0.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.21.0",

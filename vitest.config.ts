@@ -6,6 +6,11 @@ import { resolve } from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(
+      process.env.NODE_ENV || 'development'
+    ),
+  },
   test: {
     globals: true,
     environment: 'happy-dom',
