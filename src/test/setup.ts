@@ -10,7 +10,7 @@ if (!import.meta.env.VITE_YOUTUBE_API_KEY) {
 
 if (!import.meta.env.VITE_APP_TITLE) {
   Object.defineProperty(import.meta.env, 'VITE_APP_TITLE', {
-    value: 'Personal Portal Site',
+    value: 'Lothar portal',
     writable: true,
   });
 }
