@@ -110,6 +110,10 @@ jobs:
 
       - name: Verify build
         run: npm run deploy:verify
+        env:
+          VITE_YOUTUBE_API_KEY: ${{ secrets.VITE_YOUTUBE_API_KEY }}
+          VITE_APP_TITLE: ${{ vars.VITE_APP_TITLE || 'Personal Portal Site' }}
+          VITE_APP_DESCRIPTION: ${{ vars.VITE_APP_DESCRIPTION || 'Modern personal portfolio and social media hub' }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
