@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
   AWS_REGION: 'us-east-1'
 
 jobs:
@@ -23,18 +23,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
 
       - name: Clear npm cache
         run: npm cache clean --force
 
-      - name: Install dependencies
+      - name: Remove package-lock.json if exists
         run: |
           if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
+            rm package-lock.json
           fi
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Verify ESLint dependencies
         run: |
@@ -62,18 +62,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
 
       - name: Clear npm cache
         run: npm cache clean --force
 
-      - name: Install dependencies
+      - name: Remove package-lock.json if exists
         run: |
           if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
+            rm package-lock.json
           fi
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Build application
         run: npm run deploy:build
