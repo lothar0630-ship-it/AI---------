@@ -23,10 +23,15 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment variables
+# Environment variables - ALL .env files should be excluded
+.env
+.env.*
 .env.local
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
 
 # Build outputs
