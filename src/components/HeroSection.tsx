@@ -159,7 +159,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ personalInfo }) => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
-                {personalInfo.name}
+                {`${personalInfo.name}（ロタール）`}
               </motion.h1>
             </motion.div>
 
