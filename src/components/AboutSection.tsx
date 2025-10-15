@@ -120,7 +120,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ personalInfo }) => {
                 animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -20 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
               >
-                はじめまして、{personalInfo.name}です
+                はじめまして、{personalInfo.name}（ロタール）です
               </motion.h3>
 
               <div className="prose prose-lg max-w-none text-secondary-700 leading-relaxed space-y-4">

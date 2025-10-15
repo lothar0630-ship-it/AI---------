@@ -384,7 +384,7 @@ describe('AboutSection Component', () => {
 
       // 名前の表示確認
       expect(
-        screen.getByText('はじめまして、テスト太郎です')
+        screen.getByText('はじめまして、テスト太郎（ロタール）です')
       ).toBeInTheDocument();
 
       // 説明文の表示確認
@@ -472,7 +472,9 @@ describe('AboutSection Component', () => {
 
       const h3Elements = screen.getAllByRole('heading', { level: 3 });
       expect(h3Elements).toHaveLength(2);
-      expect(h3Elements[0]).toHaveTextContent('はじめまして、テスト太郎です');
+      expect(h3Elements[0]).toHaveTextContent(
+        'はじめまして、テスト太郎（ロタール）です'
+      );
       expect(h3Elements[1]).toHaveTextContent('得意分野・使用ツール');
 
       const h4Elements = screen.getAllByRole('heading', { level: 4 });

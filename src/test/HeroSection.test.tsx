@@ -51,7 +51,7 @@ describe('HeroSection Component', () => {
       expect(screen.getByText('👋 こんにちは！')).toBeInTheDocument();
 
       // 名前の表示確認
-      expect(screen.getByText('テスト太郎（ロタール）')).toBeInTheDocument();
+      expect(screen.getByText('テスト太郎')).toBeInTheDocument();
 
       // 職業・肩書きの表示確認
       expect(screen.getByText('フロントエンドエンジニア')).toBeInTheDocument();
@@ -148,9 +148,7 @@ describe('HeroSection Component', () => {
       // Framer Motionのアニメーションはインラインスタイルで制御される
       expect(greetingElement).toHaveAttribute('style');
 
-      const nameElement = screen
-        .getByText('テスト太郎（ロタール）')
-        .closest('div');
+      const nameElement = screen.getByText('テスト太郎').closest('div');
       expect(nameElement).toHaveAttribute('style');
 
       const titleElement = screen
@@ -316,7 +314,7 @@ describe('HeroSection Component', () => {
       expect(greetingText).toHaveClass('text-lg', 'md:text-xl');
 
       // 名前のレスポンシブサイズ
-      const nameHeading = screen.getByText('テスト太郎（ロタール）');
+      const nameHeading = screen.getByText('テスト太郎');
       expect(nameHeading).toHaveClass(
         'text-responsive-4xl',
         'md:text-responsive-6xl'

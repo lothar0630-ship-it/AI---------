@@ -359,7 +359,7 @@ describe('Animation Effects Tests', () => {
 
       // 各アニメーション要素の存在を確認
       expect(screen.getByText('👋 こんにちは！')).toBeInTheDocument();
-      expect(screen.getByText('テスト太郎（ロタール）')).toBeInTheDocument();
+      expect(screen.getByText('テスト太郎')).toBeInTheDocument();
       expect(screen.getByText(mockPersonalInfo.title)).toBeInTheDocument();
       expect(
         screen.getByText(mockPersonalInfo.description)
