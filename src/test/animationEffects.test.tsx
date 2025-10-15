@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import HeroSection from '../components/HeroSection';
@@ -8,7 +9,7 @@ import { PersonalInfo } from '../types';
 // Mock Framer Motion completely
 vi.mock('framer-motion', () => ({
   motion: {
-    section: ({ children, ...props }: any) => {
+    section: React.forwardRef(({ children, ...props }: any, ref: any) => {
       const {
         whileHover,
         whileTap,
@@ -17,8 +18,12 @@ vi.mock('framer-motion', () => ({
         transition,
         ...cleanProps
       } = props;
-      return <section {...cleanProps}>{children}</section>;
-    },
+      return (
+        <section ref={ref} {...cleanProps}>
+          {children}
+        </section>
+      );
+    }),
     div: ({ children, ...props }: any) => {
       const {
         whileHover,
@@ -354,7 +359,7 @@ describe('Animation Effects Tests', () => {
 
       // 各アニメーション要素の存在を確認
       expect(screen.getByText('👋 こんにちは！')).toBeInTheDocument();
-      expect(screen.getByText('テスト太郎')).toBeInTheDocument();
+      expect(screen.getByText('テスト太郎（ロタール）')).toBeInTheDocument();
       expect(screen.getByText(mockPersonalInfo.title)).toBeInTheDocument();
       expect(
         screen.getByText(mockPersonalInfo.description)

@@ -51,7 +51,7 @@ describe('HeroSection Component', () => {
       expect(screen.getByText('👋 こんにちは！')).toBeInTheDocument();
 
       // 名前の表示確認
-      expect(screen.getByText('テスト太郎')).toBeInTheDocument();
+      expect(screen.getByText('テスト太郎（ロタール）')).toBeInTheDocument();
 
       // 職業・肩書きの表示確認
       expect(screen.getByText('フロントエンドエンジニア')).toBeInTheDocument();
@@ -148,7 +148,9 @@ describe('HeroSection Component', () => {
       // Framer Motionのアニメーションはインラインスタイルで制御される
       expect(greetingElement).toHaveAttribute('style');
 
-      const nameElement = screen.getByText('テスト太郎').closest('div');
+      const nameElement = screen
+        .getByText('テスト太郎（ロタール）')
+        .closest('div');
       expect(nameElement).toHaveAttribute('style');
 
       const titleElement = screen
@@ -314,7 +316,7 @@ describe('HeroSection Component', () => {
       expect(greetingText).toHaveClass('text-lg', 'md:text-xl');
 
       // 名前のレスポンシブサイズ
-      const nameHeading = screen.getByText('テスト太郎');
+      const nameHeading = screen.getByText('テスト太郎（ロタール）');
       expect(nameHeading).toHaveClass(
         'text-responsive-4xl',
         'md:text-responsive-6xl'
@@ -504,7 +506,7 @@ describe('HeroSection Component', () => {
         'rounded-full'
       );
 
-      // ホバー効果は#059669（emerald-600）の色に変更されることをコメントで記録
+      // ホバー効果は#059669（emerald-600）の背景色と#FFFFFF（白）の文字色に変更されることをコメントで記録
       // whileHover: { backgroundColor: '#059669', color: '#FFFFFF' }
     });
 
