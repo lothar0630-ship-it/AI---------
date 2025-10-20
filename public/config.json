@@ -39,6 +39,12 @@
       "url": "https://www.nicovideo.jp/user/119594209",
       "icon": "niconico",
       "label": "ニコニコ動画"
+    },
+    {
+      "platform": "note",
+      "url": "https://note.com/lothar0630",
+      "icon": "note",
+      "label": "Note"
     }
   ],
   "theme": {

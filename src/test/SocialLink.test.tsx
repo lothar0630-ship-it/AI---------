@@ -35,6 +35,13 @@ const mockGitHubLink: SocialLinkType = {
   label: 'GitHub',
 };
 
+const mockNoteLink: SocialLinkType = {
+  platform: 'note',
+  url: 'https://note.com/testuser',
+  icon: 'note',
+  label: 'Note',
+};
+
 const mockUnknownLink: SocialLinkType = {
   platform: 'unknown',
   url: 'https://example.com',
@@ -64,6 +71,18 @@ describe('SocialLink Component', () => {
     const followText = screen.getByText('フォローする');
 
     expect(githubLabel).toBeDefined();
+    expect(followText).toBeDefined();
+  });
+
+  it('should render Note link correctly', () => {
+    render(<SocialLink socialLink={mockNoteLink} />, {
+      wrapper: AllTheProviders,
+    });
+
+    const noteLabel = screen.getByText('Note');
+    const followText = screen.getByText('フォローする');
+
+    expect(noteLabel).toBeDefined();
     expect(followText).toBeDefined();
   });
 
@@ -131,6 +150,7 @@ describe('SocialLink Component', () => {
         icon: 'linkedin',
         label: 'LinkedIn',
       },
+      { ...mockNoteLink, platform: 'note', label: 'Note' },
     ];
 
     platforms.forEach(platform => {

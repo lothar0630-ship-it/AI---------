@@ -218,6 +218,11 @@ export class YouTubeAPIClient {
           return false;
         }
 
+        // タイトルに「#shorts」が含まれている場合は除外（ショート動画）
+        if (title.includes('#shorts')) {
+          return false;
+        }
+
         // 動画の説明にライブ関連のキーワードが含まれている場合は除外
         const description = (video.snippet.description || '').toLowerCase();
         if (liveKeywords.some(keyword => description.includes(keyword))) {

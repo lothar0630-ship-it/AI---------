@@ -106,6 +106,18 @@ const SocialLink: React.FC<SocialLinkProps> = ({
             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 17.568c0 .432-.352.784-.784.784H7.216c-.432 0-.784-.352-.784-.784V6.432c0-.432.352-.784.784-.784h9.568c.432 0 .784.352.784.784v11.136zM8.784 8.784v6.432h1.568V8.784H8.784zm2.352 0v6.432h1.568V8.784h-1.568zm2.352 0v6.432h1.568V8.784h-1.568z" />
           </svg>
         );
+      case 'note':
+        return (
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6 12c0 3.314-2.686 6-6 6s-6-2.686-6-6 2.686-6 6-6 6 2.686 6 6zm-9-3v6h2v-4h2v4h2V9h-6z" />
+          </svg>
+        );
       default:
         return <ExternalLink size={32} strokeWidth={1.5} />;
     }
@@ -153,6 +165,11 @@ const SocialLink: React.FC<SocialLinkProps> = ({
         bg: 'bg-orange-50 hover:bg-orange-500',
         hover: 'group-hover:text-white',
         text: 'text-orange-600',
+      },
+      note: {
+        bg: 'bg-green-50 hover:bg-green-500',
+        hover: 'group-hover:text-white',
+        text: 'text-green-600',
       },
     };
 

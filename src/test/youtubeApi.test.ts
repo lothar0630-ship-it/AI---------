@@ -410,6 +410,100 @@ describe('YouTubeAPIClient', () => {
         expect.stringContaining('maxResults=50') // 5 * 10 = 50
       );
     });
+
+    it('should filter out videos with #shorts in title', async () => {
+      const videosResponseWithShorts = {
+        items: [
+          {
+            id: 'shorts-video-id',
+            snippet: {
+              title: 'Test #shorts Video',
+              description: 'Test shorts video description',
+              publishedAt: '2024-01-01T00:00:00Z',
+              thumbnails: {
+                medium: {
+                  url: 'https://example.com/thumbnail.jpg',
+                  width: 320,
+                  height: 180,
+                },
+              },
+              liveBroadcastContent: 'none',
+              categoryId: '20',
+            },
+            contentDetails: {
+              duration: 'PT30S', // 30秒のショート動画
+            },
+            status: {
+              privacyStatus: 'public',
+            },
+          },
+          {
+            id: 'regular-video-id',
+            snippet: {
+              title: 'Regular Video Title',
+              description: 'Regular video description',
+              publishedAt: '2024-01-01T00:00:00Z',
+              thumbnails: {
+                medium: {
+                  url: 'https://example.com/thumbnail2.jpg',
+                  width: 320,
+                  height: 180,
+                },
+              },
+              liveBroadcastContent: 'none',
+              categoryId: '20',
+            },
+            contentDetails: {
+              duration: 'PT5M30S', // 5分30秒の通常動画
+            },
+            status: {
+              privacyStatus: 'public',
+            },
+          },
+        ],
+      };
+
+      const playlistResponseWithMultiple = {
+        items: [
+          {
+            snippet: {
+              resourceId: {
+                videoId: 'shorts-video-id',
+              },
+            },
+          },
+          {
+            snippet: {
+              resourceId: {
+                videoId: 'regular-video-id',
+              },
+            },
+          },
+        ],
+      };
+
+      // アップロード再生リストを使用
+      (global.fetch as any)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockChannelUploadsResponse,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => playlistResponseWithMultiple,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => videosResponseWithShorts,
+        });
+
+      const result = await client.getLatestVideos('test-channel-id', 2);
+
+      // #shortsを含む動画は除外され、通常の動画のみが返される
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe('regular-video-id');
+      expect(result[0].title).toBe('Regular Video Title');
+    });
   });
 });
 
