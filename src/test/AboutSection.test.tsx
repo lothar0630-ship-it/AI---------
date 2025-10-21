@@ -486,16 +486,19 @@ describe('AboutSection Component', () => {
       expect(h4Elements).toHaveLength(2);
     });
 
-    it('should render skill tags as non-interactive elements', async () => {
+    it('should render skill tags as keyboard accessible elements', async () => {
       render(<AboutSection personalInfo={mockPersonalInfo} />);
 
       const skillTags = screen.getAllByRole('text');
       const firstSkillTag = skillTags[0];
 
-      // スキルタグがフォーカス可能でないことを確認
-      expect(firstSkillTag).not.toHaveAttribute('tabIndex');
+      // スキルタグがキーボードアクセス可能であることを確認
+      expect(firstSkillTag).toHaveAttribute('tabIndex', '0');
 
-      // インタラクティブなクラスが含まれていないことを確認
+      // ARIA labelが適切に設定されていることを確認
+      expect(firstSkillTag).toHaveAttribute('aria-label');
+
+      // インタラクティブなクラスが含まれていないことを確認（装飾的な要素として）
       expect(firstSkillTag).not.toHaveClass('focus:outline-none');
       expect(firstSkillTag).not.toHaveClass('focus:ring-2');
       expect(firstSkillTag).not.toHaveClass('focus:ring-primary');

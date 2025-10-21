@@ -200,6 +200,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ personalInfo }) => {
                       className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full text-responsive-sm font-semibold border border-primary/20"
                       role="text"
                       aria-label={`得意分野: ${skill}`}
+                      tabIndex={0}
                     >
                       {skill}
                     </span>
