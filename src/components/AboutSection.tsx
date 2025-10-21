@@ -196,23 +196,13 @@ const AboutSection: React.FC<AboutSectionProps> = ({ personalInfo }) => {
                       stiffness: 200,
                     }}
                   >
-                    <motion.span
-                      className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full text-responsive-sm font-semibold border border-primary/20 cursor-default focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                      whileHover={{
-                        scale: 1.05,
-                        backgroundColor: '#059669',
-                        color: '#FFFFFF',
-                        boxShadow:
-                          '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ type: 'spring', stiffness: 300 }}
+                    <span
+                      className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full text-responsive-sm font-semibold border border-primary/20"
                       role="text"
                       aria-label={`得意分野: ${skill}`}
-                      tabIndex={0}
                     >
                       {skill}
-                    </motion.span>
+                    </span>
                   </motion.div>
                 ))}
               </div>

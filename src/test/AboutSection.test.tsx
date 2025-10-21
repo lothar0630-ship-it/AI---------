@@ -119,7 +119,7 @@ describe('AboutSection Component', () => {
       });
     });
 
-    it('should have hover effects on skill tags', () => {
+    it('should render skill tags without interactive effects', () => {
       const { container } = render(
         <AboutSection personalInfo={mockPersonalInfo} />
       );
@@ -128,19 +128,24 @@ describe('AboutSection Component', () => {
         '.bg-primary\\/10.text-primary'
       );
 
-      // ホバー効果のクラスが適用されていることを確認（framer-motionのwhileHoverは実際のクラスとして適用されない）
+      // スキルタグが基本的なスタイルクラスを持っていることを確認
       skillTags.forEach(tag => {
         expect(tag).toHaveClass(
-          'cursor-default',
-          'focus:outline-none',
-          'focus:ring-2',
-          'focus:ring-primary',
-          'focus:ring-offset-2'
+          'inline-block',
+          'bg-primary/10',
+          'text-primary',
+          'px-4',
+          'py-2',
+          'rounded-full',
+          'text-responsive-sm',
+          'font-semibold',
+          'border',
+          'border-primary/20'
         );
+        // インタラクティブなクラスが含まれていないことを確認
+        expect(tag).not.toHaveClass('cursor-default');
+        expect(tag).not.toHaveClass('focus:outline-none');
       });
-
-      // ホバー効果は#059669（emerald-600）の背景色と#FFFFFF（白）の文字色に変更されることをコメントで記録
-      // whileHover: { backgroundColor: '#059669', color: '#FFFFFF' }
     });
 
     it('should render skills section with proper heading', () => {
@@ -481,21 +486,19 @@ describe('AboutSection Component', () => {
       expect(h4Elements).toHaveLength(2);
     });
 
-    it('should have proper focus management for skill tags', async () => {
+    it('should render skill tags as non-interactive elements', async () => {
       render(<AboutSection personalInfo={mockPersonalInfo} />);
 
       const skillTags = screen.getAllByRole('text');
       const firstSkillTag = skillTags[0];
 
-      firstSkillTag.focus();
-      expect(firstSkillTag).toHaveFocus();
+      // スキルタグがフォーカス可能でないことを確認
+      expect(firstSkillTag).not.toHaveAttribute('tabIndex');
 
-      // フォーカススタイルの確認
-      expect(firstSkillTag).toHaveClass(
-        'focus:outline-none',
-        'focus:ring-2',
-        'focus:ring-primary'
-      );
+      // インタラクティブなクラスが含まれていないことを確認
+      expect(firstSkillTag).not.toHaveClass('focus:outline-none');
+      expect(firstSkillTag).not.toHaveClass('focus:ring-2');
+      expect(firstSkillTag).not.toHaveClass('focus:ring-primary');
     });
   });
 });

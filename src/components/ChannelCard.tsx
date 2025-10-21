@@ -38,6 +38,28 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
   const latestVideo =
     channel.videos && channel.videos.length > 0 ? channel.videos[0] : null;
 
+  // チャンネルURLを生成する関数
+  const getChannelUrl = (channel: ChannelData): string => {
+    // 常にチャンネルIDから標準URLを生成（確実に正しいチャンネルに遷移するため）
+    if (channel.id) {
+      return `https://www.youtube.com/channel/${channel.id}`;
+    }
+
+    // フォールバック: 設定されたURLを使用（ただし、プレースホルダーでない場合のみ）
+    if (
+      channel.url &&
+      !channel.url.includes('UCxxxxxxxxxxxxx') &&
+      !channel.url.includes('UCyyyyyyyyyyy')
+    ) {
+      return channel.url;
+    }
+
+    // 最後の手段: YouTubeのホームページ
+    return 'https://www.youtube.com';
+  };
+
+  const channelUrl = getChannelUrl(channel);
+
   return (
     <motion.article
       className="bg-white rounded-3xl shadow-xl overflow-hidden h-full flex flex-col"
@@ -91,7 +113,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
         </motion.p>
 
         <motion.a
-          href={channel.url}
+          href={channelUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center space-x-2 text-primary font-medium text-responsive-sm group"
@@ -165,7 +187,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
               最新動画を確認するには、チャンネルページをご覧ください
             </p>
             <motion.a
-              href={channel.url}
+              href={channelUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg text-responsive-sm font-medium mx-auto"

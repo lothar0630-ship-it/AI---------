@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PersonalInfo } from '../types';
-import LazyImage from './LazyImage';
+import OptimizedImage from './OptimizedImage';
 
 interface HeroSectionProps {
   personalInfo: PersonalInfo;
@@ -83,7 +83,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ personalInfo }) => {
                 animate={{ rotate: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <LazyImage
+                <OptimizedImage
                   src={personalInfo.avatar}
                   alt={`${personalInfo.name}のプロフィール写真`}
                   className="w-full h-full object-cover"

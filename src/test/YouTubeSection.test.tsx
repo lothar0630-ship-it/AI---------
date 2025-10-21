@@ -658,4 +658,73 @@ describe('YouTube Section - Edge Cases', () => {
     // 最新動画セクションが表示される
     expect(screen.getAllByText('最新動画')).toHaveLength(2);
   });
+
+  it('should generate correct YouTube URLs from channel data', () => {
+    // customUrlを持つチャンネル
+    const channelWithCustomUrl = {
+      id: 'UCtest123',
+      name: 'Custom URL Channel',
+      description: 'Channel with custom URL',
+      url: 'https://youtube.com/channel/UCxxxxxxxxxxxxx', // プレースホルダー
+      customUrl: '@testchannel',
+    };
+
+    // customUrlがないチャンネル
+    const channelWithoutCustomUrl = {
+      id: 'UCtest456',
+      name: 'ID Only Channel',
+      description: 'Channel without custom URL',
+      url: 'https://youtube.com/channel/UCyyyyyyyyyyy', // プレースホルダー
+    };
+
+    (useYouTubeAvailability as any).mockReturnValue({
+      isAvailable: true,
+      hasApiKey: true,
+    });
+
+    (useYouTubeData as any).mockReturnValue({
+      data: [channelWithCustomUrl, channelWithoutCustomUrl],
+      isLoading: false,
+      error: { videos: null, channels: null },
+    });
+
+    render(
+      <AllTheProviders>
+        <ChannelCard
+          channel={channelWithCustomUrl}
+          isLoading={false}
+          hasApiConnection={true}
+        />
+      </AllTheProviders>
+    );
+
+    // チャンネルIDを使用したURLが生成されることを確認（customUrlではなく）
+    const customUrlLink = screen.getByLabelText(
+      'Custom URL ChannelのYouTubeチャンネルを新しいタブで開く'
+    );
+    expect(customUrlLink).toHaveAttribute(
+      'href',
+      'https://www.youtube.com/channel/UCtest123'
+    );
+
+    // 2つ目のチャンネルをテスト
+    const { rerender } = render(
+      <AllTheProviders>
+        <ChannelCard
+          channel={channelWithoutCustomUrl}
+          isLoading={false}
+          hasApiConnection={true}
+        />
+      </AllTheProviders>
+    );
+
+    // チャンネルIDを使用したURLが生成されることを確認
+    const idOnlyLink = screen.getByLabelText(
+      'ID Only ChannelのYouTubeチャンネルを新しいタブで開く'
+    );
+    expect(idOnlyLink).toHaveAttribute(
+      'href',
+      'https://www.youtube.com/channel/UCtest456'
+    );
+  });
 });

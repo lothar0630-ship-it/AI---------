@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Personal Portal Configuration",
+  "type": "object",
+  "properties": {
+    "personalInfo": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "avatar": { "type": "string" }
+      },
+      "required": ["name", "title", "description", "avatar"]
+    },
+    "youtubeChannels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "customUrl": { "type": "string" }
+        },
+        "required": ["id", "name", "description", "url"]
+      }
+    },
+    "socialLinks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "platform": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "icon": { "type": "string" },
+          "label": { "type": "string" }
+        },
+        "required": ["platform", "url", "icon", "label"]
+      }
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "primaryColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "secondaryColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "accentColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+      },
+      "required": ["primaryColor", "secondaryColor", "accentColor"]
+    }
+  },
+  "required": ["personalInfo", "youtubeChannels", "socialLinks", "theme"]
+}

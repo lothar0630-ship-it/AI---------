@@ -3,21 +3,21 @@
     "name": "Lothar",
     "title": "動画投稿者、動画勢Vtuber",
     "description": "ゲーム実況と動画勢Vtuberを中心に、2つのYouTubeチャンネルで活動している動画投稿者です。視聴者も自分も楽しめるコンテンツ作りを心がけ、Vtuberチャンネルは毎月25日の定期投稿を続けています。",
-    "avatar": "images/avatar.png"
+    "avatar": "images/avatar.webp"
   },
   "youtubeChannels": [
     {
       "id": "UCfwwSQO4_ONXzO-vLO_P8dA",
       "name": "ゲーム実況チャンネル",
       "description": "MHWの縛りプレイを中心にゲーム実況動画、配信をやっているチャンネル。",
-      "url": "https://youtube.com/channel/UCxxxxxxxxxxxxx",
+      "url": "https://youtube.com/channel/UCfwwSQO4_ONXzO-vLO_P8dA",
       "customUrl": "@techchannel"
     },
     {
       "id": "UCax82t3Xqk1rm0w55Iv_UXg",
       "name": "ライフスタイルチャンネル",
       "description": "動画勢Vtuberとして毎月25日に動画をあげているチャンネル。メインコンテンツはモノづくりとVlog",
-      "url": "https://youtube.com/channel/UCyyyyyyyyyyy",
+      "url": "https://youtube.com/channel/UCax82t3Xqk1rm0w55Iv_UXg",
       "customUrl": "@lifestyle"
     }
   ],
